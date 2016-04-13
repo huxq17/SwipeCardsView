@@ -1,0 +1,36 @@
+<!--
+  Copyright 2011 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<resources>
+
+    <declare-styleable name="SwipCardsView">
+        <!-- yOffsetStep定义的是卡片之间在y轴方向上的偏移量，单位是dp，
+        举个例子，可见的卡片有3个，如果步长是20dp，从前往后看，卡片y轴坐标会依次增加20dp，表现上就是后面一张卡片底部有20dp会露出来
+        如果值是负的，如 -20dp，那么表现则相反。
+         如果不需要对卡片进行y轴方向上的偏移量处理，不设置这个属性或者设置为0dp就可以了-->
+        <attr name="yOffsetStep" format="dimension" />
+        <!-- alpha定义的取值范围是0-100，所以alpha的步长也得在这个范围之内，
+        举个例子，可见的卡片有3个，如果步长是40，那么最前面的alpha是100，后面一点的是60，最后面的是20
+         如果不需要对卡片进行透明度处理，不设置这个属性或者设置为0就可以了-->
+        <attr name="alphaOffsetStep" format="integer" />
+        <!-- scale定义的取值范围是0-1，所以scale的步长也得在这个范围之内，
+        举个例子，可见的卡片有3个，如果步长是0.08，那么最前面的alpha是1，后面一点的是0.92，最后面的是0.84
+        值得注意的是 x 和 y同时被缩放了(1 - scaleStep*index)
+        如果不需要对卡片进行缩放处理，不设置这个属性或者设置为0就可以了-->
+        <attr name="scaleOffsetStep" format="float" />
+        <attr name="visibleCount" format="integer" />
+    </declare-styleable>
+</resources>
