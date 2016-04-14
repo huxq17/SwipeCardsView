@@ -27,7 +27,7 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
     private SwipeCardsView swipeCardsView;
     private int page = 1;
     private List<ContentBean> mList = new ArrayList<>();
-    MeiziAdapter adapter;
+    private MeiziAdapter adapter;
 
     public MeiziFragment() {
     }

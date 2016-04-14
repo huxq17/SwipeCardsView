@@ -269,7 +269,7 @@ public class ViewDragHelper {
          * the view is already captured; this indicates that a new pointer is trying to take
          * control of the view.</p>
          * <p/>
-         * <p>If this method returns true, a call to {@link #onViewCaptured(View, int)}
+         * <p>If this method returns true, a call to {@link #onViewCaptured(android.view.View, int)}
          * will follow if the capture is successful.</p>
          *
          * @param child     Child the user is attempting to capture
@@ -442,7 +442,7 @@ public class ViewDragHelper {
 
     /**
      * Capture a specific child view for dragging within the parent. The callback will be notified
-     * but {@link Callback#tryCaptureView(View, int)} will not be asked permission to
+     * but {@link Callback#tryCaptureView(android.view.View, int)} will not be asked permission to
      * capture this view.
      *
      * @param childView       Child view to capture
@@ -484,7 +484,7 @@ public class ViewDragHelper {
 
     /**
      * The result of a call to this method is equivalent to
-     * {@link #processTouchEvent(MotionEvent)} receiving an ACTION_CANCEL event.
+     * {@link #processTouchEvent(android.view.MotionEvent)} receiving an ACTION_CANCEL event.
      */
     public void cancel() {
         mActivePointerId = INVALID_POINTER;
@@ -706,7 +706,7 @@ public class ViewDragHelper {
      *
      * @param deferCallbacks true if state callbacks should be deferred via posted message.
      *                       Set this to true if you are calling this method from
-     *                       {@link View#computeScroll()} or similar methods
+     *                       {@link android.view.View#computeScroll()} or similar methods
      *                       invoked as part of layout or drawing.
      * @return true if settle is still in progress
      */
@@ -847,8 +847,8 @@ public class ViewDragHelper {
      * of the ViewDragHelper's knowledge).
      * <p/>
      * <p>The state used to report this information is populated by the methods
-     * {@link #shouldInterceptTouchEvent(MotionEvent)} or
-     * {@link #processTouchEvent(MotionEvent)}. If one of these methods has not
+     * {@link #shouldInterceptTouchEvent(android.view.MotionEvent)} or
+     * {@link #processTouchEvent(android.view.MotionEvent)}. If one of these methods has not
      * been called for all relevant MotionEvents to track, the information reported
      * by this method may be stale or incorrect.</p>
      *
@@ -1134,13 +1134,13 @@ public class ViewDragHelper {
             case MotionEvent.ACTION_MOVE: {
                 if (mDragState == STATE_DRAGGING) {
                     final int index = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
-                    final float x = MotionEventCompat.getX(ev, index);
-                    final float y = MotionEventCompat.getY(ev, index);
-                    final int idx = (int) (x - mLastMotionX[mActivePointerId]);
-                    final int idy = (int) (y - mLastMotionY[mActivePointerId]);
-
-                    dragTo(mCapturedView.getLeft() + idx, mCapturedView.getTop() + idy, idx, idy);
-
+                    if (index >= 0) {
+                        final float x = MotionEventCompat.getX(ev, index);
+                        final float y = MotionEventCompat.getY(ev, index);
+                        final int idx = (int) (x - mLastMotionX[mActivePointerId]);
+                        final int idy = (int) (y - mLastMotionY[mActivePointerId]);
+                        dragTo(mCapturedView.getLeft() + idx, mCapturedView.getTop() + idy, idx, idy);
+                    }
                     saveLastMotion(ev);
                 } else {
                     // Check to see if any pointer is now over a draggable view.
@@ -1288,8 +1288,8 @@ public class ViewDragHelper {
      * the required slop threshold.
      * <p/>
      * <p>This depends on internal state populated by
-     * {@link #shouldInterceptTouchEvent(MotionEvent)} or
-     * {@link #processTouchEvent(MotionEvent)}. You should only rely on
+     * {@link #shouldInterceptTouchEvent(android.view.MotionEvent)} or
+     * {@link #processTouchEvent(android.view.MotionEvent)}. You should only rely on
      * the results of this method after all currently available touch data
      * has been provided to one of these two methods.</p>
      *
@@ -1312,8 +1312,8 @@ public class ViewDragHelper {
      * the required slop threshold.
      * <p/>
      * <p>This depends on internal state populated by
-     * {@link #shouldInterceptTouchEvent(MotionEvent)} or
-     * {@link #processTouchEvent(MotionEvent)}. You should only rely on
+     * {@link #shouldInterceptTouchEvent(android.view.MotionEvent)} or
+     * {@link #processTouchEvent(android.view.MotionEvent)}. You should only rely on
      * the results of this method after all currently available touch data
      * has been provided to one of these two methods.</p>
      *
