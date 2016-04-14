@@ -103,7 +103,9 @@ public class SwipeCardsView extends LinearLayout {
     public void notifyDatasetChanged(List<?> list) {
         if (list != null) {
             dataList = list;
-            orderViewStack();
+            if (mDragHelper.getViewDragState() == mDragHelper.STATE_IDLE) {
+                orderViewStack();
+            }
         }
     }
 
@@ -150,7 +152,6 @@ public class SwipeCardsView extends LinearLayout {
 
         return shouldIntercept && moveFlag;
     }
-
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         processTouchEvent(ev);

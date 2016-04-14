@@ -93,7 +93,6 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
 
     }
 
-
     @Override
     public void dealPageSelected(int position) {
 
