@@ -30,6 +30,8 @@ import java.util.regex.Pattern;
 public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFragment> {
     protected F fragment;
     private Class<T> entityClass;
+    private boolean isFirst = true;
+    private List<ContentBean> firstList = new ArrayList<>();
 
     public BasePresenter(F fragment) {
         this.fragment = fragment;
@@ -128,14 +130,17 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
             int groupId = Utils.url2groupid(bean.getUrl());
             bean.setGroupid(groupId);//首页的这个是从大到小排序的 可以当做排序依据
 //            list.add(bean);
-            List<ContentBean> block = getContent(bean.getUrl(), groupId, tag);
+            List<ContentBean> block = getContent(task, bean.getUrl(), groupId, tag);
+            if (firstList.size() > 0) {
+                block.removeAll(firstList);
+            }
             task.notifyLoading(block);
             contentBeanList.addAll(block);
         }
         return contentBeanList;
     }
 
-    private List<ContentBean> getContent(String url, int groupid, Object tag) {
+    private List<ContentBean> getContent(Task task, String url, int groupid, Object tag) {
         List<ContentBean> list = new ArrayList<>();
         HttpResponse httpResponse = HttpSender.instance().getSync(url, null, null, tag);
         String html = httpResponse.string();
@@ -148,6 +153,12 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
                     content.setOrder(groupid + i);
                     content.setGroupid(groupid);
                     list.add(content);
+                }
+                if (list.size() >= 20 && isFirst) {
+                    isFirst = false;
+                    firstList.addAll(list);
+                    task.notifyLoading(list);
+
                 }
             }
         }
