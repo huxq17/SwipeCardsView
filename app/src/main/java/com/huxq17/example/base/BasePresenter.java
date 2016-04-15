@@ -205,6 +205,9 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
         ContentBean content = new ContentBean();
         Document doc = Jsoup.parse(html);
         Elements links = doc.select("img[src~=(?i)\\.(png|jpe?g)]");
+        if (links.size() == 0) {
+            return null;
+        }
         Element element = links.get(0).getElementsByTag("img").first();
         content.setUrl(element.attr("src"));
         content.setTitle(element.attr("alt"));

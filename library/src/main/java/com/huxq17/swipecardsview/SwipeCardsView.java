@@ -149,11 +149,25 @@ public class SwipeCardsView extends LinearLayout {
             // action_down时就让mDragHelper开始工作
             processTouchEvent(ev);
         }
-
         return shouldIntercept && moveFlag;
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        final int action = ev.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                LogUtil.i("test onTouchEvent ACTION_DOWN action=" + action);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                break;
+            case MotionEvent.ACTION_UP:
+                LogUtil.i("test onTouchEvent ACTION_UP action=" + action);
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                LogUtil.i("test onTouchEvent ACTION_CANCEL action=" + action);
+                break;
+        }
         processTouchEvent(ev);
         return true;
     }
@@ -378,25 +392,21 @@ public class SwipeCardsView extends LinearLayout {
                 + Math.abs(changeViewLeft - initCenterViewX);
         float rate = distance / (float) MAX_SLIDE_DISTANCE_LINKAGE;
 
-        float rate1 = rate;
-        float rate2 = rate - 0.2f;
-
-        if (rate > 1) {
-            rate1 = 1;
+        for (int i = 1; i < viewList.size(); i++) {
+            float rate3 = rate - 0.2f * i;
+            if (rate3 > 1) {
+                rate3 = 1;
+            } else if (rate3 < 0) {
+                rate3 = 0;
+            }
+            ajustLinkageViewItem(changedView, rate3, i);
         }
-
-        if (rate2 < 0) {
-            rate2 = 0;
-        } else if (rate2 > 1) {
-            rate2 = 1;
-        }
-        ajustLinkageViewItem(changedView, rate1, 1);
-        ajustLinkageViewItem(changedView, rate2, 2);
     }
 
     // 由index对应view变成index-1对应的view
     private void ajustLinkageViewItem(View changedView, float rate, int index) {
         int changeIndex = viewList.indexOf(changedView);
+
         int initPosY = yOffsetStep * index;
         float initScale = 1 - scaleOffsetStep * index;
         float initAlpha = 1.0f * (100 - alphaOffsetStep * index) / 100;
@@ -432,11 +442,11 @@ public class SwipeCardsView extends LinearLayout {
             // 由于dx作为分母，此处保护处理
             dx = 1;
         }
-        if (xvel > X_VEL_THRESHOLD || dx > X_DISTANCE_THRESHOLD) {//向右边滑出
+        if (dx > X_DISTANCE_THRESHOLD || (xvel > X_VEL_THRESHOLD && dx > 0)) {//向右边滑出
             finalX = allWidth;
             finalY = dy * (childWith + initCenterViewX) / dx + initCenterViewY;
             flyType = VANISH_TYPE_RIGHT;
-        } else if (xvel < -X_VEL_THRESHOLD || dx < -X_DISTANCE_THRESHOLD) {//向左边滑出
+        } else if (dx < -X_DISTANCE_THRESHOLD || (xvel < -X_VEL_THRESHOLD && dx < 0)) {//向左边滑出
             finalX = -childWith;
             finalY = dy * (childWith + initCenterViewX) / (-dx) + dy
                     + initCenterViewY;
