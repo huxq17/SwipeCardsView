@@ -37,6 +37,14 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         return fragment;
     }
 
+    public void doLeftOut() {
+        swipeCardsView.slideCardOut(SwipeCardsView.SlideType.LEFT);
+    }
+
+    public void doRightOut() {
+        swipeCardsView.slideCardOut(SwipeCardsView.SlideType.RIGHT);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,7 +77,7 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         if (adapter == null) {
             adapter = new MeiziAdapter(mList, getActivity());
             swipeCardsView.setAdapter(adapter);
-        }else{
+        } else {
             swipeCardsView.notifyDatasetChanged(mList);
         }
     }

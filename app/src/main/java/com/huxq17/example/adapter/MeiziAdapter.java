@@ -1,12 +1,14 @@
 package com.huxq17.example.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.huxq17.example.R;
 import com.huxq17.example.bean.ContentBean;
 import com.huxq17.swipecardsview.BaseCardAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -41,6 +43,6 @@ public class MeiziAdapter extends BaseCardAdapter {
         ImageView imageView = (ImageView) cardview.findViewById(R.id.iv_meizi);
         ContentBean meizi = datas.get(position);
         String url = meizi.getUrl();
-//        Picasso.with(context).load(url).config(Bitmap.Config.RGB_565).into(imageView);
+        Picasso.with(context).load(url).config(Bitmap.Config.RGB_565).into(imageView);
     }
 }

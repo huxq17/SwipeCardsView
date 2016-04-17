@@ -8,12 +8,13 @@ import com.huxq17.example.base.BaseActivity;
 import com.huxq17.example.fragment.MeiziFragment;
 
 public class MainActivity extends BaseActivity {
+    private MeiziFragment meiziFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MeiziFragment meiziFragment = MeiziFragment.getInstance();
+        meiziFragment = MeiziFragment.getInstance();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, meiziFragment).commit();
     }
 
@@ -30,7 +31,11 @@ public class MainActivity extends BaseActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+       if (id == R.id.action_left) {
+            meiziFragment.doLeftOut();
+            return true;
+        } else if (id == R.id.action_right) {
+            meiziFragment.doRightOut();
             return true;
         }
 
