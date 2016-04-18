@@ -177,6 +177,7 @@ public class SwipeCardsView extends LinearLayout {
                 mInitialMotionX = mLastX;
                 break;
             case MotionEvent.ACTION_MOVE:
+                mLastMoveEvent = ev;
                 int currentY = (int) ev.getRawY();
                 int currentX = (int) ev.getRawX();
                 deltaY = currentY - mLastY;
@@ -196,6 +197,8 @@ public class SwipeCardsView extends LinearLayout {
                 if (isIntercepted && (hasTouchTopView || isTouchTopView(ev))) {
                     hasTouchTopView = true;
                     moveTopView(deltaX, deltaY);
+                    sendCancelEvent();
+                    return true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -203,6 +206,7 @@ public class SwipeCardsView extends LinearLayout {
                 hasTouchTopView = false;
                 isTouching = false;
                 isIntercepted = false;
+                mHasSendCancelEvent = false;
                 mVelocityTracker.computeCurrentVelocity(1000, mMaxVelocity);
                 final float velocityX = mVelocityTracker.getXVelocity();
                 final float velocityY = mVelocityTracker.getYVelocity();
@@ -214,6 +218,27 @@ public class SwipeCardsView extends LinearLayout {
                 break;
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    private MotionEvent mLastMoveEvent;
+    private boolean mHasSendCancelEvent = false;
+
+    private void sendCancelEvent() {
+        if (!mHasSendCancelEvent) {
+            mHasSendCancelEvent = true;
+            MotionEvent last = mLastMoveEvent;
+            MotionEvent e = MotionEvent.obtain(
+                    last.getDownTime(),
+                    last.getEventTime()
+                            + ViewConfiguration.getLongPressTimeout(),
+                    MotionEvent.ACTION_CANCEL, last.getX(), last.getY(),
+                    last.getMetaState());
+            dispatchTouchEventSupper(e);
+        }
+    }
+
+    public boolean dispatchTouchEventSupper(MotionEvent e) {
+        return super.dispatchTouchEvent(e);
     }
 
     private void releaseTopView(float xvel, float yvel) {
