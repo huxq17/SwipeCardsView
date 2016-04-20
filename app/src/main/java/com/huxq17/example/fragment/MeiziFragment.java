@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.andbase.tractor.utils.LogUtils;
 import com.huxq17.example.MainActivity;
 import com.huxq17.example.R;
 import com.huxq17.example.adapter.MeiziAdapter;
@@ -54,6 +55,31 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         activity = (MainActivity) getActivity();
         activity.setSupportActionBar(toolbar);
         getData();
+        swipeCardsView.setCardsSlideListener(new SwipeCardsView.CardsSlideListener() {
+            @Override
+            public void onShow(int index) {
+                LogUtils.i("test showing index = "+index);
+            }
+
+            @Override
+            public void onCardVanish(int index, SwipeCardsView.SlideType type) {
+                String orientation = "";
+                switch (type){
+                    case LEFT:
+                        orientation="向左飞出";
+                        break;
+                    case RIGHT:
+                        orientation="向右飞出";
+                        break;
+                }
+                toast("test position = "+index+";卡片"+orientation);
+            }
+
+            @Override
+            public void onItemClick(View cardImageView, int index) {
+                toast("点击了 position="+index);
+            }
+        });
         return container;
     }
 
