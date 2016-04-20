@@ -45,4 +45,9 @@ public class MeiziAdapter extends BaseCardAdapter {
         String url = meizi.getUrl();
         Picasso.with(context).load(url).config(Bitmap.Config.RGB_565).into(imageView);
     }
+
+    @Override
+    public int getVisibleCardCount() {
+        return super.getVisibleCardCount();
+    }
 }
