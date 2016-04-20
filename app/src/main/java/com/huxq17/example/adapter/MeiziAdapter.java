@@ -46,6 +46,10 @@ public class MeiziAdapter extends BaseCardAdapter {
         Picasso.with(context).load(url).config(Bitmap.Config.RGB_565).into(imageView);
     }
 
+    /**
+     * 如果可见的卡片数是3，则可以不用实现这个方法
+     * @return
+     */
     @Override
     public int getVisibleCardCount() {
         return super.getVisibleCardCount();

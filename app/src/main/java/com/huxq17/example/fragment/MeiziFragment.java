@@ -37,11 +37,15 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         MeiziFragment fragment = new MeiziFragment();
         return fragment;
     }
-
+    /**
+     * 卡片向左边飞出
+     */
     public void doLeftOut() {
         swipeCardsView.slideCardOut(SwipeCardsView.SlideType.LEFT);
     }
-
+    /**
+     * 卡片向右边飞出
+     */
     public void doRightOut() {
         swipeCardsView.slideCardOut(SwipeCardsView.SlideType.RIGHT);
     }
@@ -55,6 +59,7 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         activity = (MainActivity) getActivity();
         activity.setSupportActionBar(toolbar);
         getData();
+        //设置滑动监听
         swipeCardsView.setCardsSlideListener(new SwipeCardsView.CardsSlideListener() {
             @Override
             public void onShow(int index) {

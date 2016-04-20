@@ -13,7 +13,6 @@
         android:background="#f3f3f3"
         card:alphaOffsetStep="40"
         card:scaleOffsetStep="0.08"
-        card:visibleCount="3"
         card:yOffsetStep="20dp" />
 
     <android.support.design.widget.AppBarLayout

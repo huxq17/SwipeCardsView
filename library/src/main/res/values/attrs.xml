@@ -31,6 +31,5 @@
         值得注意的是 x 和 y同时被缩放了(1 - scaleStep*index)
         如果不需要对卡片进行缩放处理，不设置这个属性或者设置为0就可以了-->
         <attr name="scaleOffsetStep" format="float" />
-        <attr name="visibleCount" format="integer" />
     </declare-styleable>
 </resources>
