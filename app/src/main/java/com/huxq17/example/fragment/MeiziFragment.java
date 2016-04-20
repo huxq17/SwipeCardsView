@@ -72,7 +72,7 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
                         orientation="向右飞出";
                         break;
                 }
-                toast("test position = "+index+";卡片"+orientation);
+//                toast("test position = "+index+";卡片"+orientation);
             }
 
             @Override

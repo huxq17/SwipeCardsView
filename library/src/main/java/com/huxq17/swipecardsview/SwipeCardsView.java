@@ -299,7 +299,7 @@ public class SwipeCardsView extends LinearLayout {
         final int startTop = topView.getTop();
         final int dx = finalLeft - startLeft;
         final int dy = finalTop - startTop;
-        if (dx != 0 && dy != 0) {
+        if (dx != 0 || dy != 0) {
             mScroller.startScroll(topView.getLeft(), topView.getTop(), dx, dy, duration);
             ViewCompat.postInvalidateOnAnimation(this);
         }
