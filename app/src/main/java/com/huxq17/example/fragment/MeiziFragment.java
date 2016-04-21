@@ -37,12 +37,14 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         MeiziFragment fragment = new MeiziFragment();
         return fragment;
     }
+
     /**
      * 卡片向左边飞出
      */
     public void doLeftOut() {
         swipeCardsView.slideCardOut(SwipeCardsView.SlideType.LEFT);
     }
+
     /**
      * 卡片向右边飞出
      */
@@ -63,18 +65,18 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         swipeCardsView.setCardsSlideListener(new SwipeCardsView.CardsSlideListener() {
             @Override
             public void onShow(int index) {
-                LogUtils.i("test showing index = "+index);
+                LogUtils.i("test showing index = " + index);
             }
 
             @Override
             public void onCardVanish(int index, SwipeCardsView.SlideType type) {
                 String orientation = "";
-                switch (type){
+                switch (type) {
                     case LEFT:
-                        orientation="向左飞出";
+                        orientation = "向左飞出";
                         break;
                     case RIGHT:
-                        orientation="向右飞出";
+                        orientation = "向右飞出";
                         break;
                 }
 //                toast("test position = "+index+";卡片"+orientation);
@@ -82,7 +84,7 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
 
             @Override
             public void onItemClick(View cardImageView, int index) {
-                toast("点击了 position="+index);
+                toast("点击了 position=" + index);
             }
         });
         return container;
