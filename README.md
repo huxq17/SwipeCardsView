@@ -4,10 +4,10 @@ SwipeCardsView
 之所以做这个效果是因为项目中有这个效果需要实现。
 
  - 一开始我有在github上找到不少类似的库，但是发现放在项目中会发现要么有锯齿，要么就是卡顿，总之就是效果不好，其实绝大多数的库都和[Swipecards](https://github.com/Diolor/Swipecards)差不多，做法是重写了adapterview，然后设置监听，在监听里做移动和缩放。移动用的是设置view的x和y坐标，这样做法的弊端是会频繁触发view树重绘，效率不高。
- - 后来发现这个库[android-card-slide-panel](https://github.com/xmuSistone/android-card-slide-panel)，它的做法是重写了viewgroup，里面view的数目是固定的，卡片的滑动是通过viewDragHelper来做的，没有锯齿同时也不卡顿了，但是viewDragHelper有问题：
- 1、在多个手指同时滑动的时候会有概率出现pointIndex out of range异常，这个问题倒没什么，我通过修改viewDragHelper的源码已经解决了这个问题；
- 2、当用picasso或者glide加载图片以后，在手指拖动卡片的过程中有时会莫名的收到MotionEvent的UP事件，导致卡片回到了初始位置，这个问题折腾了我半天，后来的解决办法是弃用了viewDragHelper，直接使用Scroller。
- 3、还有一点要吐槽下，这个库的使用太麻烦了，耦合太重，集成到项目里比较费事。
+ - 后来发现这个库[android-card-slide-panel](https://github.com/xmuSistone/android-card-slide-panel)，它的做法是重写了viewgroup，里面view的数目是固定的，卡片的滑动是通过viewDragHelper来做的，没有锯齿同时也不卡顿了，但是viewDragHelper有问题：<br>
+ 1、在多个手指同时滑动的时候会有概率出现pointIndex out of range异常，这个问题倒没什么，我通过修改viewDragHelper的源码已经解决了这个问题；<br>
+ 2、当用picasso或者glide加载图片以后，在手指拖动卡片的过程中有时会莫名的收到MotionEvent的UP事件，导致卡片回到了初始位置，这个问题折腾了我半天，后来的解决办法是弃用了viewDragHelper，直接使用Scroller。<br>
+ 3、还有一点要吐槽下，这个库的使用太麻烦了，耦合太重，集成到项目里比较费事。<br>
 ### 效果图
 <td>
 	 <img src="http://img.my.csdn.net/uploads/201604/20/1461153231_2553.gif" width="290" height="485" />
