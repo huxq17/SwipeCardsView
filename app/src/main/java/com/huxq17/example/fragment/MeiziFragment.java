@@ -104,6 +104,9 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         show();
     }
 
+    /**
+     * 显示cardsview
+     */
     private void show() {
         if (adapter == null) {
             adapter = new MeiziAdapter(mList, getActivity());

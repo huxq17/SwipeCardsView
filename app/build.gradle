@@ -34,6 +34,7 @@ dependencies {
     compile 'io.realm:realm-android:0.81.1'
     compile 'org.jsoup:jsoup:1.8.2'
     compile 'com.huxq17.android:SwipeCardsView:0.0.5'
+    compile 'com.android.support:appcompat-v7:23.0.1'
 //    compile project(':library')
     compile project(':okhttp')
 }

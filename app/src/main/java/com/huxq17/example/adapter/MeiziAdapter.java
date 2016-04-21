@@ -52,6 +52,6 @@ public class MeiziAdapter extends BaseCardAdapter {
      */
     @Override
     public int getVisibleCardCount() {
-        return super.getVisibleCardCount();
+        return 3;
     }
 }
