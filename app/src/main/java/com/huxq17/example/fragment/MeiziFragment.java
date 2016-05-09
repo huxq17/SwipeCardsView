@@ -55,9 +55,9 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        container = (ViewGroup) inflater.inflate(R.layout.fragment_meizi, container, false);
-        Toolbar toolbar = (Toolbar) container.findViewById(R.id.toolbar);
-        swipeCardsView = (SwipeCardsView) container.findViewById(R.id.swipCardsView);
+        ViewGroup inflatedContainer = (ViewGroup) inflater.inflate(R.layout.fragment_meizi, container, false);
+        Toolbar toolbar = (Toolbar) inflatedContainer.findViewById(R.id.toolbar);
+        swipeCardsView = (SwipeCardsView) inflatedContainer.findViewById(R.id.swipCardsView);
         activity = (MainActivity) getActivity();
         activity.setSupportActionBar(toolbar);
         getData();
@@ -87,7 +87,7 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
                 toast("点击了 position=" + index);
             }
         });
-        return container;
+        return inflatedContainer;
     }
 
     public void getData() {

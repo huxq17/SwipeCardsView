@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.andbase.tractor.utils.LogUtils;
 import com.huxq17.example.http.body.FileBody;
+import com.huxq17.example.http.body.exception.SwipeCardsException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class RequestParams {
      */
     public void addFile(File file) {
         if (file == null || !file.exists()) {
-            throw new RuntimeException("file==null||!file.exists()");
+            throw new SwipeCardsException("file==null||!file.exists()");
         }
         FileBody body = new FileBody(file.getName(), file.getAbsolutePath(), file);
         mFiles.add(body);
@@ -74,7 +75,7 @@ public class RequestParams {
      */
     public void addFile(String name, File file) {
         if (file == null || !file.exists()) {
-            throw new RuntimeException("file==null||!file.exists()");
+            throw new SwipeCardsException("file==null||!file.exists()");
         }
         FileBody body = new FileBody(name, file.getAbsolutePath(), file);
         mFiles.add(body);
@@ -87,7 +88,7 @@ public class RequestParams {
      */
     public void addFile(String name, File file, String contentType) {
         if (file == null || !file.exists()) {
-            throw new RuntimeException("file==null||!file.exists()");
+            throw new SwipeCardsException("file==null||!file.exists()");
         }
         FileBody body = new FileBody(name, file.getAbsolutePath(), file, contentType);
         mFiles.add(body);

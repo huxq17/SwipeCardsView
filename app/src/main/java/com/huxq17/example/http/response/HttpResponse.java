@@ -1,5 +1,7 @@
 package com.huxq17.example.http.response;
 
+import com.huxq17.example.http.body.exception.SwipeCardsException;
+
 import java.io.InputStream;
 import java.io.Serializable;
 
@@ -34,7 +36,7 @@ public class HttpResponse implements Serializable {
                     stringBuffer.append(" builder.setResponseType(ResponseType.InputStream);");
                     break;
             }
-            throw new RuntimeException(stringBuffer.toString());
+            throw new SwipeCardsException(stringBuffer.toString());
         }
     }
 
