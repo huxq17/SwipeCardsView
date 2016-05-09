@@ -19,11 +19,13 @@ import com.huxq17.example.http.response.ResponseType;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -36,6 +38,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.huxq17.example.http.response.ResponseType.*;
 
 /**
  * Created by xiaoqian.hu on 2015/10/15.
@@ -148,7 +151,7 @@ public class OKHttp implements HttpBase {
         String contentType = requestParams.getContentType();
         String charset = requestParams.getCharSet();
         String params = requestParams.toString();
-        LinkedHashMap<String, Object> paramsHashmap = requestParams.getmParams();
+        Map<String, Object> paramsHashmap = requestParams.getmParams();
         if (params == null || TextUtils.isEmpty(contentType) || TextUtils.isEmpty(charset)) {
             throw new RuntimeException("params is null");
         }
@@ -182,7 +185,7 @@ public class OKHttp implements HttpBase {
     }
 
     private void addHeader(Request.Builder builder, HttpHeader header) {
-        HashMap<String, String> headers = header.getHeaders();
+        Map<String, String> headers = header.getHeaders();
         if (headers != null && headers.size() > 0) {
             for (HashMap.Entry<String, String> map :
                     headers.entrySet()) {
@@ -225,20 +228,17 @@ public class OKHttp implements HttpBase {
                 httpResponse.setResponseType(type);
                 Response response = call.execute();
                 String string = null;
-                switch (type) {
-                    case String:
-                        try {
-                            string = response.body().string();
-                        } catch (IOException e) {
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        httpResponse.setString(string);
+                if (type == String) {
+                    try {
+                        string = response.body().string();
+                    } catch (IOException e) {
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    httpResponse.setString(string);
 //                        LogUtils.d("okresult: " + string);
-                        break;
-                    case InputStream:
+                } else if(type == InputStream) {
                         httpResponse.setInputStream(response.body().byteStream());
-                        break;
                 }
                 httpResponse.setContentLength(response.body().contentLength());
             } catch (Exception e) {
@@ -275,20 +275,17 @@ public class OKHttp implements HttpBase {
                 String string = null;
                 httpResponse.setContentLength(response.body().contentLength());
                 httpResponse.setResponseType(mType);
-                switch (mType) {
-                    case String:
-                        try {
-                            string = response.body().string();
-                        } catch (IOException e) {
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        httpResponse.setString(string);
-                        LogUtils.d("okresult: " + string + ";contentLength=" + response.body().contentLength());
-                        break;
-                    case InputStream:
-                        httpResponse.setInputStream(response.body().byteStream());
-                        break;
+                if (mType == String) {
+                    try {
+                        string = response.body().string();
+                    } catch (IOException e) {
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    httpResponse.setString(string);
+                    LogUtils.d("okresult: " + string + ";contentLength=" + response.body().contentLength());
+                } else if(mType == InputStream) {
+                    httpResponse.setInputStream(response.body().byteStream());
                 }
                 notifySuccess(httpResponse);
             } catch (Exception e) {
@@ -317,20 +314,17 @@ public class OKHttp implements HttpBase {
                     synchronized (NetWorkTask.this) {
                         HttpResponse httpResponse = new HttpResponse();
                         String string = null;
-                        switch (mType) {
-                            case String:
-                                try {
-                                    string = response.body().string();
-                                } catch (IOException e) {
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                httpResponse.setString(string);
-                                LogUtils.d("okresult: " + string);
-                                break;
-                            case InputStream:
-                                httpResponse.setInputStream(response.body().byteStream());
-                                break;
+                        if (mType == String) {
+                            try {
+                                string = response.body().string();
+                            } catch (IOException e) {
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            httpResponse.setString(string);
+                            LogUtils.d("okresult: " + string);
+                        } else if(mType == InputStream) {
+                            httpResponse.setInputStream(response.body().byteStream());
                         }
                         httpResponse.setString(string);
                         httpResponse.setContentLength(response.body().contentLength());

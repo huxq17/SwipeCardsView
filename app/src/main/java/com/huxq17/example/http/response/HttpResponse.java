@@ -3,6 +3,8 @@ package com.huxq17.example.http.response;
 import java.io.InputStream;
 import java.io.Serializable;
 
+import static com.huxq17.example.http.response.ResponseType.*;
+
 /**
  * Created by huxq17 on 2015/11/28.
  */
@@ -26,13 +28,10 @@ public class HttpResponse implements Serializable {
             StringBuffer stringBuffer = new StringBuffer();
             stringBuffer.append("response type mismatch,you need type is ").append(requstType)
                     .append(" ，but your configuration is ").append(type).append(" ,so you should config responseType like this:");
-            switch (requstType) {
-                case String:
-                    stringBuffer.append(" builder.setResponseType(ResponseType.String);");
-                    break;
-                case InputStream:
-                    stringBuffer.append(" builder.setResponseType(ResponseType.InputStream);");
-                    break;
+            if (requstType == String) {
+                stringBuffer.append(" builder.setResponseType(ResponseType.String);");
+            } else if (requstType == InputStream) {
+                stringBuffer.append(" builder.setResponseType(ResponseType.InputStream);");
             }
             throw new RuntimeException(stringBuffer.toString());
         }

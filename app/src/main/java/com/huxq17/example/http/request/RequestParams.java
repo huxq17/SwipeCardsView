@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -19,7 +20,7 @@ public class RequestParams {
     private String charSet = "utf-8";
     private String stringParams;
 
-    private LinkedHashMap<String, Object> mParams;
+    private Map<String, Object> mParams;
     private List<FileBody> mFiles;
 
     public RequestParams() {
@@ -29,7 +30,7 @@ public class RequestParams {
 
     public boolean isEmpty() {
         return TextUtils.isEmpty(stringParams) &&
-                (mParams == null || mParams != null && mParams.size() == 0) && (mFiles == null || mFiles != null && mFiles.size() == 0);
+                (mParams == null || mParams.size() == 0) && (mFiles == null || mFiles.size() == 0);
     }
 
     /**
@@ -42,7 +43,7 @@ public class RequestParams {
         mParams.put(name, params);
     }
 
-    public void setParams(LinkedHashMap<String, Object> params) {
+    public void setParams(Map<String, Object> params) {
         mParams = params;
     }
 
@@ -98,7 +99,7 @@ public class RequestParams {
         mFiles.clear();
     }
 
-    public LinkedHashMap<String, Object> getmParams() {
+    public Map<String, Object> getmParams() {
         return mParams;
     }
 

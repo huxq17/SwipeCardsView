@@ -4,6 +4,7 @@ import com.huxq17.example.http.response.ResponseType;
 
 import java.io.File;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Created by huxq17 on 2015/11/24.
@@ -96,7 +97,7 @@ public class HttpRequest {
             return this;
         }
 
-        public Builder setHeader(LinkedHashMap<String, String> header) {
+        public Builder setHeader(Map<String, String> header) {
             this.header.setHeader(header);
             return this;
         }
@@ -106,7 +107,7 @@ public class HttpRequest {
             return this;
         }
 
-        public Builder setParams(LinkedHashMap<String, Object> params) {
+        public Builder setParams(Map<String, Object> params) {
             if (params == null) {
                 throw new RuntimeException("params==null");
             }

@@ -20,6 +20,8 @@ import com.huxq17.swipecardsview.SwipeCardsView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.huxq17.swipecardsview.SwipeCardsView.SlideType.*;
+
 /**
  * Created by huxq17 on 2016/4/11.
  */
@@ -71,13 +73,10 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
             @Override
             public void onCardVanish(int index, SwipeCardsView.SlideType type) {
                 String orientation = "";
-                switch (type) {
-                    case LEFT:
-                        orientation = "向左飞出";
-                        break;
-                    case RIGHT:
-                        orientation = "向右飞出";
-                        break;
+                if (type == LEFT) {
+                    orientation = "向左飞出";
+                } else if(type == RIGHT) {
+                    orientation = "向右飞出";
                 }
 //                toast("test position = "+index+";卡片"+orientation);
             }
