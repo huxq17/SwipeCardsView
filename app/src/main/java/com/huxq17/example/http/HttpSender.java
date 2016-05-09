@@ -63,31 +63,23 @@ public class HttpSender {
 
     public void get(String url, LinkedHashMap<String, String> headers, String params,
                     final LoadListener listener, Object... tag) {
-        if (!TextUtils.isEmpty(params)) {
-            url = url + "?" + params;
-        }
         HttpRequest.Builder builder = new HttpRequest.Builder();
-        builder.url(url);
+        builder.url(!TextUtils.isEmpty(params) ? url + "?" + params : url);
         addHeaders(builder, headers);
         builder.setResponseType(ResponseType.String);
         mHttpBase.get(builder.build(), listener, tag);
     }
 
-    public HttpResponse getInputStreamSync(String url, LinkedHashMap<String, String> headers, String params, Object... tag) {
-        if (!TextUtils.isEmpty(params)) {
-            url = url + "?" + params;
-        }
+    public HttpResponse getInputStreamSync(String url, Map<String, String> headers, String params, Object... tag) {
         HttpRequest.Builder builder = new HttpRequest.Builder();
-        builder.url(url).synchron().setResponseType(ResponseType.InputStream);
+        builder.url(!TextUtils.isEmpty(params) ? url + "?" + params : url).synchron().setResponseType(ResponseType.InputStream);
         addHeaders(builder, headers);
         return mHttpBase.get(builder.build(), null, tag);
     }
-    public HttpResponse getSync(String url, LinkedHashMap<String, String> headers, String params, Object... tag){
-        if (!TextUtils.isEmpty(params)) {
-            url = url + "?" + params;
-        }
+
+    public HttpResponse getSync(String url, Map<String, String> headers, String params, Object... tag){
         HttpRequest.Builder builder = new HttpRequest.Builder();
-        builder.url(url).synchron().setResponseType(ResponseType.String);
+        builder.url(!TextUtils.isEmpty(params) ? url + "?" + params : url).synchron().setResponseType(ResponseType.String);
         addHeaders(builder, headers);
         return mHttpBase.get(builder.build(), null, tag);
     }

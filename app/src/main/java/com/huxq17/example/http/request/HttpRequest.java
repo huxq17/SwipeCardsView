@@ -1,5 +1,6 @@
 package com.huxq17.example.http.request;
 
+import com.huxq17.example.http.body.exception.SwipeCardsException;
 import com.huxq17.example.http.response.ResponseType;
 
 import java.io.File;
@@ -108,7 +109,7 @@ public class HttpRequest {
 
         public Builder setParams(LinkedHashMap<String, Object> params) {
             if (params == null) {
-                throw new RuntimeException("params==null");
+                throw new SwipeCardsException("params==null");
             }
             this.requestParams.setParams(params);
             return this;

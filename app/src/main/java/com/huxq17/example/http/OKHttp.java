@@ -9,6 +9,7 @@ import com.andbase.tractor.task.Task;
 import com.andbase.tractor.task.TaskPool;
 import com.andbase.tractor.utils.LogUtils;
 import com.huxq17.example.http.body.FileBody;
+import com.huxq17.example.http.body.exception.SwipeCardsException;
 import com.huxq17.example.http.request.CountingRequestBody;
 import com.huxq17.example.http.request.HttpHeader;
 import com.huxq17.example.http.request.HttpMethod;
@@ -96,7 +97,7 @@ public class OKHttp implements HttpBase {
 
         RequestBody requestBody = buildRequestBody(requestParams);
         if (requestBody == null) {
-            throw new RuntimeException("requestBody==null");
+            throw new SwipeCardsException("requestBody==null");
         }
         Request.Builder builder = getBuilder().url(url).post(requestBody);
         addHeader(builder, header);
@@ -120,14 +121,14 @@ public class OKHttp implements HttpBase {
         String charset = requestParams.getCharSet();
 
         if (TextUtils.isEmpty(contentType) || TextUtils.isEmpty(charset)) {
-            throw new RuntimeException("contentType is empty || charset is empty");
+            throw new SwipeCardsException("contentType is empty || charset is empty");
         }
         addHeader(builder, header);
 
         if (HttpMethod.permitsRequestBody(method)) {
             if (HttpMethod.requiresRequestBody(method)) {
                 if (requestParams.isEmpty()) {
-                    throw new RuntimeException("method:" + method.toString() + "must have  params");
+                    throw new SwipeCardsException("method:" + method.toString() + "must have  params");
                 }
             }
             if (!requestParams.isEmpty()) {
@@ -150,7 +151,7 @@ public class OKHttp implements HttpBase {
         String params = requestParams.toString();
         LinkedHashMap<String, Object> paramsHashmap = requestParams.getmParams();
         if (params == null || TextUtils.isEmpty(contentType) || TextUtils.isEmpty(charset)) {
-            throw new RuntimeException("params is null");
+            throw new SwipeCardsException("params is null");
         }
         if (files != null && files.size() > 0) {
             LogUtils.d("upload file.size=" + files.size());
