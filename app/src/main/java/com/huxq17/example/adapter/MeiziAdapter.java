@@ -25,9 +25,12 @@ public class MeiziAdapter extends BaseCardAdapter {
         this.context = context;
     }
 
+    public void setData(List<ContentBean> datas){
+        this.datas = datas;
+    }
     @Override
-    public List getData() {
-        return datas;
+    public int getCount() {
+        return datas.size();
     }
 
     @Override
@@ -36,7 +39,7 @@ public class MeiziAdapter extends BaseCardAdapter {
     }
 
     @Override
-    public void onBindData(int position, View cardview, Object data) {
+    public void onBindData(int position, View cardview) {
         if (datas == null || datas.size() == 0) {
             return;
         }

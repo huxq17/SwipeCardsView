@@ -134,6 +134,8 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
             if (firstList.size() > 0) {
                 block.removeAll(firstList);
             }
+            if(isFirst){
+            }
             task.notifyLoading(block);
             contentBeanList.addAll(block);
         }

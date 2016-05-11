@@ -2,6 +2,7 @@ package com.huxq17.example.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,8 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
     private int page = 1;
     private List<ContentBean> mList = new ArrayList<>();
     private MeiziAdapter adapter;
+    private FloatingActionButton floatingActionButton;
+    private int curIndex;
 
     public MeiziFragment() {
     }
@@ -58,6 +61,7 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         container = (ViewGroup) inflater.inflate(R.layout.fragment_meizi, container, false);
         Toolbar toolbar = (Toolbar) container.findViewById(R.id.toolbar);
         swipeCardsView = (SwipeCardsView) container.findViewById(R.id.swipCardsView);
+        floatingActionButton = (FloatingActionButton) container.findViewById(R.id.fab);
         activity = (MainActivity) getActivity();
         activity.setSupportActionBar(toolbar);
         getData();
@@ -65,6 +69,7 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         swipeCardsView.setCardsSlideListener(new SwipeCardsView.CardsSlideListener() {
             @Override
             public void onShow(int index) {
+                curIndex = index;
                 LogUtils.i("test showing index = " + index);
             }
 
@@ -85,6 +90,14 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
             @Override
             public void onItemClick(View cardImageView, int index) {
                 toast("点击了 position=" + index);
+            }
+        });
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //必须先改变adapter中的数据，然后才能由数据变化带动页面刷新
+                adapter.setData(mList);
+                swipeCardsView.notifyDatasetChanged(0);
             }
         });
         return container;
@@ -114,7 +127,8 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
             adapter = new MeiziAdapter(mList, getActivity());
             swipeCardsView.setAdapter(adapter);
         } else {
-            swipeCardsView.notifyDatasetChanged(mList);
+            adapter.setData(mList);
+            swipeCardsView.notifyDatasetChanged(curIndex);
         }
     }
 

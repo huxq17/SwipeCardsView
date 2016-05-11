@@ -39,8 +39,8 @@ public class SwipeCardsView extends LinearLayout {
     private static final int X_DISTANCE_THRESHOLD = 300;
 
     private CardsSlideListener mCardsSlideListener; // 回调接口
-    private List<?> dataList; // 存储的数据链表
-    private int showingIndex = 0; // 当前正在显示的小项
+    private int mCount; // 卡片的数量
+    private int showingIndex = 0; // 当前正在显示的卡片位置
     private OnClickListener btnListener;
 
     private BaseCardAdapter mAdapter;
@@ -51,6 +51,12 @@ public class SwipeCardsView extends LinearLayout {
     private int mInitialMotionY;
     private int mInitialMotionX;
     private final int SCROLL_DURATION = 300; // scroll back duration
+    private boolean hasTouchTopView;
+    private VelocityTracker mVelocityTracker;
+    private float mMaxVelocity;
+    private float mMinVelocity;
+    private boolean isIntercepted = false;
+    private boolean isTouching = false;
 
     public SwipeCardsView(Context context) {
         this(context, null);
@@ -110,18 +116,28 @@ public class SwipeCardsView extends LinearLayout {
 
     private void bindCardData(int position, View cardview) {
         if (mAdapter != null) {
-            mAdapter.onBindData(position, cardview, dataList.get(position));
+            mAdapter.onBindData(position, cardview);
         }
         cardview.setVisibility(View.VISIBLE);
     }
 
-    public void notifyDatasetChanged(List<?> list) {
-        if (list != null) {
-            dataList = list;
-            if (canResetView()) {
-                resetViewGroup();
-            }
+    /**
+     * 刷新ui
+     *
+     * @param index 当前显示的卡片下标
+     */
+    public void notifyDatasetChanged(int index) {
+        if (canResetView()) {
+            refreshUI(index);
         }
+    }
+
+    private void refreshUI(int index) {
+        if (mAdapter == null) {
+            throw new RuntimeException("adapter==null");
+        }
+        showingIndex = index;
+        changeUI();
     }
 
     public void setAdapter(BaseCardAdapter adapter) {
@@ -129,15 +145,20 @@ public class SwipeCardsView extends LinearLayout {
             throw new RuntimeException("adapter==null");
         }
         mAdapter = adapter;
-        dataList = mAdapter.getData();
-        if (dataList == null) {
-            throw new RuntimeException("mAdapter.getData() return null");
-        }
+        showingIndex = 0;
+        changeUI();
+    }
 
+    private void changeUI() {
+        if (mAdapter == null) {
+            throw new RuntimeException("adapter==null");
+        }
+        removeAllViewsInLayout();
         viewList.clear();
+        mCount = mAdapter.getCount();
         int cardVisibleCount = mAdapter.getVisibleCardCount();
-        cardVisibleCount = Math.min(cardVisibleCount, dataList.size());
-        for (int i = 0; i < cardVisibleCount; i++) {
+        cardVisibleCount = Math.min(cardVisibleCount, mCount);
+        for (int i = showingIndex; i < showingIndex + cardVisibleCount; i++) {
             View childView = LayoutInflater.from(getContext()).inflate(getCardLayoutId(mAdapter.getCardLayoutId()), this, false);
             if (childView == null) {
                 return;
@@ -148,16 +169,9 @@ public class SwipeCardsView extends LinearLayout {
             addView(childView, 0);
         }
         if (null != mCardsSlideListener) {
-            mCardsSlideListener.onShow(0);
+            mCardsSlideListener.onShow(showingIndex);
         }
     }
-
-    private boolean hasTouchTopView;
-    private VelocityTracker mVelocityTracker;
-    private float mMaxVelocity;
-    private float mMinVelocity;
-    private boolean isIntercepted = false;
-    private boolean isTouching = false;
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -169,7 +183,9 @@ public class SwipeCardsView extends LinearLayout {
             case MotionEvent.ACTION_DOWN:
                 mScroller.abortAnimation();
                 resetViewGroup();
-                isTouching = true;
+                if (isTouchTopView(ev)) {
+                    isTouching = true;
+                }
                 hasTouchTopView = false;
                 mLastY = (int) ev.getRawY();
                 mLastX = (int) ev.getRawX();
@@ -256,7 +272,7 @@ public class SwipeCardsView extends LinearLayout {
      */
     private boolean isTouchTopView(MotionEvent ev) {
         View topView = getTopView();
-        if (topView != null) {
+        if (topView != null && topView.getVisibility() == VISIBLE) {
             Rect bounds = new Rect();
             topView.getGlobalVisibleRect(bounds);
             int x = (int) ev.getX();
@@ -492,7 +508,7 @@ public class SwipeCardsView extends LinearLayout {
 //            addView(changedView,0);
 
         int newIndex = showingIndex + viewSize + 1;
-        if (newIndex < dataList.size()) {
+        if (newIndex < mCount) {
             bindCardData(newIndex, changedView);
         } else {
             changedView.setVisibility(View.GONE);
@@ -502,7 +518,7 @@ public class SwipeCardsView extends LinearLayout {
         viewList.add(changedView);
         releasedViewList.remove(0);
 
-        if (showingIndex + 1 < dataList.size()) {
+        if (showingIndex + 1 < mCount) {
             showingIndex++;
         }
         if (null != mCardsSlideListener) {
@@ -618,9 +634,6 @@ public class SwipeCardsView extends LinearLayout {
         }
     }
 
-    /**
-     * 这是View的方法，该方法不支持android低版本（2.2、2.3）的操作系统，所以手动复制过来以免强制退出
-     */
     public static int resolveSizeAndState(int size, int measureSpec, int childMeasuredState) {
         int result = size;
         int specMode = MeasureSpec.getMode(measureSpec);
