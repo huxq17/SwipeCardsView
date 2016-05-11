@@ -3,4 +3,5 @@
     <string name="action_settings">Settings</string>
     <string name="action_left">向左边滑出</string>
     <string name="action_right">向右边滑出</string>
+    <string name="action_retry">重新开始</string>
 </resources>

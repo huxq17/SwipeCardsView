@@ -92,7 +92,7 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
                 if (html != null) {
                     List<ContentBean> beans = parserMainBean(this, html, "", tag);
                     if (beans != null && beans.size() > 0) {
-//                        notifySuccess(beans);
+                        notifySuccess(beans);
                     } else {
                         notifyFail("数据解析异常");
                     }
@@ -134,9 +134,9 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
             if (firstList.size() > 0) {
                 block.removeAll(firstList);
             }
-            if(isFirst){
+//            if(isFirst){
+//            }
             task.notifyLoading(block);
-            }
             contentBeanList.addAll(block);
         }
         return contentBeanList;

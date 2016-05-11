@@ -55,6 +55,17 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         swipeCardsView.slideCardOut(SwipeCardsView.SlideType.RIGHT);
     }
 
+    /**
+     * 从头开始，重新浏览
+     */
+    public void doRetry() {
+        //必须先改变adapter中的数据，然后才能由数据变化带动页面刷新
+        if (mList != null) {
+            adapter.setData(mList);
+            swipeCardsView.notifyDatasetChanged(0);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,16 +103,6 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
                 toast("点击了 position=" + index);
             }
         });
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //必须先改变adapter中的数据，然后才能由数据变化带动页面刷新
-                if (mList != null) {
-                    adapter.setData(mList);
-                    swipeCardsView.notifyDatasetChanged(mList.size() - 2);
-                }
-            }
-        });
         return container;
     }
 
@@ -111,6 +112,9 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
 
     @Override
     public void dealDataResponse(List<ContentBean> bean, boolean success) {
+        if(bean==null){
+            return;
+        }
         mList = bean;
         show();
     }

@@ -37,7 +37,9 @@ public class MainActivity extends BaseActivity {
         } else if (id == R.id.action_right) {
             meiziFragment.doRightOut();
             return true;
-        }
+        }else if(id==R.id.action_retry){
+           meiziFragment.doRetry();
+       }
 
         return super.onOptionsItemSelected(item);
     }

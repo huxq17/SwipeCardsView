@@ -57,6 +57,8 @@ public class SwipeCardsView extends LinearLayout {
     private float mMinVelocity;
     private boolean isIntercepted = false;
     private boolean isTouching = false;
+    private int tempShowingIndex = -1;
+    private int cardVisibleCount = 3;
 
     public SwipeCardsView(Context context) {
         this(context, null);
@@ -120,6 +122,7 @@ public class SwipeCardsView extends LinearLayout {
         }
         cardview.setVisibility(View.VISIBLE);
     }
+
     private boolean mWaitRefresh = false;
 
     /**
@@ -128,12 +131,12 @@ public class SwipeCardsView extends LinearLayout {
      * @param index 当前显示的卡片下标
      */
     public void notifyDatasetChanged(int index) {
-        LogUtil.i("test notifyDatasetChanged canResetView");
+        LogUtil.i("test notifyDatasetChanged canResetView=" + canResetView());
         if (canResetView()) {
             refreshUI(index);
-        }else{
-            //TODO 做可以刷新页面时的处理
+        } else {
             mWaitRefresh = true;
+            tempShowingIndex = index;
         }
     }
 
@@ -142,8 +145,30 @@ public class SwipeCardsView extends LinearLayout {
             throw new RuntimeException("adapter==null");
         }
         showingIndex = index;
-        changeUI();
+        //        removeAllViewsInLayout();
+//        viewList.clear();
+        mCount = mAdapter.getCount();
+//        cardVisibleCount = mAdapter.getVisibleCardCount();
+        cardVisibleCount = Math.min(cardVisibleCount, mCount);
+        for (int i = showingIndex; i < showingIndex + cardVisibleCount; i++) {
+            View childView = viewList.get(i - showingIndex);
+            if (childView == null) {
+                return;
+            }
+            if (i < mCount) {
+                bindCardData(i, childView);
+            } else {
+                childView.setVisibility(View.GONE);
+            }
+//            viewList.add(childView);
+            childView.setOnClickListener(btnListener);
+//            addView(childView, 0);
+        }
+        if (null != mCardsSlideListener) {
+            mCardsSlideListener.onShow(showingIndex);
+        }
     }
+
 
     public void setAdapter(BaseCardAdapter adapter) {
         if (adapter == null) {
@@ -151,13 +176,6 @@ public class SwipeCardsView extends LinearLayout {
         }
         mAdapter = adapter;
         showingIndex = 0;
-        changeUI();
-    }
-
-    private void changeUI() {
-        if (mAdapter == null) {
-            throw new RuntimeException("adapter==null");
-        }
         removeAllViewsInLayout();
         viewList.clear();
         mCount = mAdapter.getCount();
@@ -173,7 +191,6 @@ public class SwipeCardsView extends LinearLayout {
             } else {
                 childView.setVisibility(View.GONE);
             }
-//            bindCardData(i, childView);
             viewList.add(childView);
             childView.setOnClickListener(btnListener);
             addView(childView, 0);
@@ -494,6 +511,10 @@ public class SwipeCardsView extends LinearLayout {
      */
     private void resetViewGroup() {
         if (releasedViewList.size() == 0) {
+            if (mWaitRefresh) {
+                mWaitRefresh = false;
+                refreshUI(tempShowingIndex);
+            }
             if (viewList.size() != 0) {
                 View topView = getTopView();
                 if (topView != null) {
@@ -503,37 +524,42 @@ public class SwipeCardsView extends LinearLayout {
                     }
                 }
             }
-            return;
-        }
-        View changedView = releasedViewList.get(0);
-        if (changedView.getLeft() == initCenterViewX) {
-            releasedViewList.remove(0);
-            return;
-        }
-        int viewSize = viewList.size();
-        removeViewInLayout(changedView);
-        addViewInLayout(changedView, 0, changedView.getLayoutParams(), true);
-        requestLayout();
+        } else {
+            View changedView = releasedViewList.get(0);
+            if (changedView.getLeft() == initCenterViewX) {
+                LogUtil.i("test resetViewGroup changedView.getLeft() == initCenterViewX");
+                releasedViewList.remove(0);
+                return;
+            }
+            int viewSize = viewList.size();
+            removeViewInLayout(changedView);
+            addViewInLayout(changedView, 0, changedView.getLayoutParams(), true);
+            requestLayout();
 //            removeView(changedView);
 //            addView(changedView,0);
+            if (mWaitRefresh) {
+                mWaitRefresh = false;
+                refreshUI(++tempShowingIndex);
+            } else {
+                int newIndex = showingIndex + viewSize + 1;
+                if (newIndex < mCount) {
+                    bindCardData(newIndex, changedView);
+                } else {
+                    changedView.setVisibility(View.GONE);
+                }
 
-        int newIndex = showingIndex + viewSize + 1;
-        if (newIndex < mCount) {
-            bindCardData(newIndex, changedView);
-        } else {
-            changedView.setVisibility(View.GONE);
+                if (showingIndex + 1 < mCount) {
+                    showingIndex++;
+                }
+                if (null != mCardsSlideListener) {
+                    mCardsSlideListener.onShow(showingIndex);
+                }
+            }
+            viewList.remove(changedView);
+            viewList.add(changedView);
+            releasedViewList.remove(0);
         }
-
-        viewList.remove(changedView);
-        viewList.add(changedView);
-        releasedViewList.remove(0);
-
-        if (showingIndex + 1 < mCount) {
-            showingIndex++;
-        }
-        if (null != mCardsSlideListener) {
-            mCardsSlideListener.onShow(showingIndex);
-        }
+        tempShowingIndex = -1;
     }
 
     /**
