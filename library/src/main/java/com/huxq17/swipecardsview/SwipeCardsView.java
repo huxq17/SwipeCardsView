@@ -120,6 +120,7 @@ public class SwipeCardsView extends LinearLayout {
         }
         cardview.setVisibility(View.VISIBLE);
     }
+    private boolean mWaitRefresh = false;
 
     /**
      * 刷新ui
@@ -127,8 +128,12 @@ public class SwipeCardsView extends LinearLayout {
      * @param index 当前显示的卡片下标
      */
     public void notifyDatasetChanged(int index) {
+        LogUtil.i("test notifyDatasetChanged canResetView");
         if (canResetView()) {
             refreshUI(index);
+        }else{
+            //TODO 做可以刷新页面时的处理
+            mWaitRefresh = true;
         }
     }
 
@@ -163,7 +168,12 @@ public class SwipeCardsView extends LinearLayout {
             if (childView == null) {
                 return;
             }
-            bindCardData(i, childView);
+            if (i < mCount) {
+                bindCardData(i, childView);
+            } else {
+                childView.setVisibility(View.GONE);
+            }
+//            bindCardData(i, childView);
             viewList.add(childView);
             childView.setOnClickListener(btnListener);
             addView(childView, 0);

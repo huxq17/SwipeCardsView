@@ -96,8 +96,10 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
             @Override
             public void onClick(View v) {
                 //必须先改变adapter中的数据，然后才能由数据变化带动页面刷新
-                adapter.setData(mList);
-                swipeCardsView.notifyDatasetChanged(0);
+                if (mList != null) {
+                    adapter.setData(mList);
+                    swipeCardsView.notifyDatasetChanged(mList.size() - 2);
+                }
             }
         });
         return container;

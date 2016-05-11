@@ -5,5 +5,5 @@ package com.huxq17.example.constants;
  */
 public class Constants {
     public static final String BaseUrl = "http://www.mzitu.com/";
-    public static String CoverUrl =BaseUrl+"/page/";
+    public static String CoverUrl =BaseUrl+"page/";
 }

@@ -10,6 +10,7 @@ import com.huxq17.example.bean.MeiziBean;
 import com.huxq17.example.http.HttpSender;
 import com.huxq17.example.http.response.HttpResponse;
 import com.huxq17.example.utils.Utils;
+import com.huxq17.swipecardsview.LogUtil;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -87,12 +88,13 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
         TaskPool.getInstance().execute(new Task(tag, listener) {
             @Override
             public void onRun() {
+                LogUtil.i("test getData url="+url);
                 HttpResponse httpResponse = HttpSender.instance().getSync(url, null, null, tag);
                 String html = httpResponse.string();
                 if (html != null) {
                     List<ContentBean> beans = parserMainBean(this, html, "", tag);
                     if (beans != null && beans.size() > 0) {
-                        notifySuccess(beans);
+//                        notifySuccess(beans);
                     } else {
                         notifyFail("数据解析异常");
                     }
@@ -135,8 +137,8 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
                 block.removeAll(firstList);
             }
             if(isFirst){
-            }
             task.notifyLoading(block);
+            }
             contentBeanList.addAll(block);
         }
         return contentBeanList;
