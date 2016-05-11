@@ -131,7 +131,6 @@ public class SwipeCardsView extends LinearLayout {
      * @param index 当前显示的卡片下标
      */
     public void notifyDatasetChanged(int index) {
-        LogUtil.i("test notifyDatasetChanged canResetView=" + canResetView());
         if (canResetView()) {
             refreshUI(index);
         } else {
@@ -145,8 +144,6 @@ public class SwipeCardsView extends LinearLayout {
             throw new RuntimeException("adapter==null");
         }
         showingIndex = index;
-        //        removeAllViewsInLayout();
-//        viewList.clear();
         mCount = mAdapter.getCount();
 //        cardVisibleCount = mAdapter.getVisibleCardCount();
         cardVisibleCount = Math.min(cardVisibleCount, mCount);
@@ -160,9 +157,7 @@ public class SwipeCardsView extends LinearLayout {
             } else {
                 childView.setVisibility(View.GONE);
             }
-//            viewList.add(childView);
             childView.setOnClickListener(btnListener);
-//            addView(childView, 0);
         }
         if (null != mCardsSlideListener) {
             mCardsSlideListener.onShow(showingIndex);
@@ -526,20 +521,22 @@ public class SwipeCardsView extends LinearLayout {
             }
         } else {
             View changedView = releasedViewList.get(0);
-            if (changedView.getLeft() == initCenterViewX) {
-                LogUtil.i("test resetViewGroup changedView.getLeft() == initCenterViewX");
-                releasedViewList.remove(0);
-                return;
-            }
+//            if (changedView.getLeft() == initCenterViewX) {
+//                releasedViewList.remove(0);
+//                return;
+//            }
             int viewSize = viewList.size();
             removeViewInLayout(changedView);
             addViewInLayout(changedView, 0, changedView.getLayoutParams(), true);
             requestLayout();
 //            removeView(changedView);
 //            addView(changedView,0);
+            viewList.remove(changedView);
+            viewList.add(changedView);
             if (mWaitRefresh) {
                 mWaitRefresh = false;
-                refreshUI(++tempShowingIndex);
+                int index = ++tempShowingIndex;
+                refreshUI(index);
             } else {
                 int newIndex = showingIndex + viewSize + 1;
                 if (newIndex < mCount) {
@@ -547,7 +544,6 @@ public class SwipeCardsView extends LinearLayout {
                 } else {
                     changedView.setVisibility(View.GONE);
                 }
-
                 if (showingIndex + 1 < mCount) {
                     showingIndex++;
                 }
@@ -555,8 +551,6 @@ public class SwipeCardsView extends LinearLayout {
                     mCardsSlideListener.onShow(showingIndex);
                 }
             }
-            viewList.remove(changedView);
-            viewList.add(changedView);
             releasedViewList.remove(0);
         }
         tempShowingIndex = -1;

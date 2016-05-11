@@ -112,11 +112,10 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
 
     @Override
     public void dealDataResponse(List<ContentBean> bean, boolean success) {
-        if(bean==null){
-            return;
-        }
-        mList = bean;
-        show();
+//        if (bean != null) {
+//            mList = bean;
+//            show();
+//        }
     }
 
     @Override
