@@ -24,7 +24,7 @@ public class SwipeCardsView extends LinearLayout {
     private List<View> viewList = new ArrayList<>(); // 存放的是每一层的view，从顶到底
     private List<View> releasedViewList = new ArrayList<>(); // 手指松开后存放的view列表
 
-    private int initCenterViewX = 0, initCenterViewY = 0; // 最初时，中间View的x位置,y位置
+    private int initLeft = 0, initTop = 0; // 正常状态下 topView的left和top
     private int mWidth = 0; // swipeCardsView的宽度
     private int mHeight = 0; // swipeCardsView的高度
     private int mCardWidth = 0; // 每一个子View对应的宽度
@@ -119,6 +119,7 @@ public class SwipeCardsView extends LinearLayout {
     private void bindCardData(int position, View cardview) {
         if (mAdapter != null) {
             mAdapter.onBindData(position, cardview);
+            cardview.setTag(position);
         }
         cardview.setVisibility(View.VISIBLE);
     }
@@ -330,7 +331,7 @@ public class SwipeCardsView extends LinearLayout {
         if (topView == null) {
             return;
         }
-        if (finalLeft != initCenterViewX) {
+        if (finalLeft != initLeft) {
             releasedViewList.add(topView);
         }
         final int startLeft = topView.getLeft();
@@ -413,8 +414,8 @@ public class SwipeCardsView extends LinearLayout {
             layoutChild(child, i);
         }
         // 初始化一些中间参数
-        initCenterViewX = viewList.get(0).getLeft();
-        initCenterViewY = viewList.get(0).getTop();
+        initLeft = viewList.get(0).getLeft();
+        initTop = viewList.get(0).getTop();
         mCardWidth = viewList.get(0).getMeasuredWidth();
     }
 
@@ -513,15 +514,15 @@ public class SwipeCardsView extends LinearLayout {
             if (viewList.size() != 0) {
                 View topView = getTopView();
                 if (topView != null) {
-                    if (topView.getLeft() != initCenterViewX || topView.getTop() != initCenterViewY) {
-                        topView.offsetLeftAndRight(initCenterViewX - topView.getLeft());
-                        topView.offsetTopAndBottom(initCenterViewY - topView.getTop());
+                    if (topView.getLeft() != initLeft || topView.getTop() != initTop) {
+                        topView.offsetLeftAndRight(initLeft - topView.getLeft());
+                        topView.offsetTopAndBottom(initTop - topView.getTop());
                     }
                 }
             }
         } else {
             View changedView = releasedViewList.get(0);
-//            if (changedView.getLeft() == initCenterViewX) {
+//            if (changedView.getLeft() == initLeft) {
 //                releasedViewList.remove(0);
 //                return;
 //            }
@@ -538,7 +539,7 @@ public class SwipeCardsView extends LinearLayout {
                 int index = ++tempShowingIndex;
                 refreshUI(index);
             } else {
-                int newIndex = showingIndex + viewSize + 1;
+                int newIndex = showingIndex + viewSize ;
                 if (newIndex < mCount) {
                     bindCardData(newIndex, changedView);
                 } else {
@@ -564,7 +565,7 @@ public class SwipeCardsView extends LinearLayout {
     private void processLinkageView(View changedView) {
         int changeViewLeft = changedView.getLeft();
         int changeViewTop = changedView.getTop();
-        int distance = Math.abs(changeViewTop - initCenterViewY) + Math.abs(changeViewLeft - initCenterViewX);
+        int distance = Math.abs(changeViewTop - initTop) + Math.abs(changeViewLeft - initLeft);
         float rate = distance / (float) MAX_SLIDE_DISTANCE_LINKAGE;
 
         for (int i = 1; i < viewList.size(); i++) {
@@ -595,7 +596,7 @@ public class SwipeCardsView extends LinearLayout {
         float alpha = initAlpha + (nextAlpha - initAlpha) * rate;
 
         View ajustView = viewList.get(changeIndex + index);
-        ajustView.offsetTopAndBottom(offset - ajustView.getTop() + initCenterViewY);
+        ajustView.offsetTopAndBottom(offset - ajustView.getTop() + initTop);
         ajustView.setScaleX(scale);
         ajustView.setScaleY(scale);
         ajustView.setAlpha(alpha);
@@ -607,23 +608,23 @@ public class SwipeCardsView extends LinearLayout {
      * @param xvel X方向上的滑动速度
      */
     private void onTopViewReleased(View changedView, float xvel, float yvel) {
-        int finalX = initCenterViewX;
-        int finalY = initCenterViewY;
+        int finalX = initLeft;
+        int finalY = initTop;
         SlideType flyType = SlideType.NONE;
 
-        int dx = changedView.getLeft() - initCenterViewX;
-        int dy = changedView.getTop() - initCenterViewY;
+        int dx = changedView.getLeft() - initLeft;
+        int dy = changedView.getTop() - initTop;
         if (dx == 0) {
             // 由于dx作为分母，此处保护处理
             dx = 1;
         }
         if (dx > X_DISTANCE_THRESHOLD || (xvel > X_VEL_THRESHOLD && dx > 0)) {//向右边滑出
             finalX = mWidth;
-            finalY = dy * (mCardWidth + initCenterViewX) / dx + initCenterViewY;
+            finalY = dy * (mCardWidth + initLeft) / dx + initTop;
             flyType = SlideType.RIGHT;
         } else if (dx < -X_DISTANCE_THRESHOLD || (xvel < -X_VEL_THRESHOLD && dx < 0)) {//向左边滑出
             finalX = -mCardWidth;
-            finalY = dy * (mCardWidth + initCenterViewX) / (-dx) + dy + initCenterViewY;
+            finalY = dy * (mCardWidth + initLeft) / (-dx) + dy + initTop;
             flyType = SlideType.LEFT;
         }
 
@@ -660,7 +661,7 @@ public class SwipeCardsView extends LinearLayout {
                 break;
         }
         if (finalX != 0) {
-            startScrollTopView(finalX, initCenterViewY + mHeight, SCROLL_DURATION, type);
+            startScrollTopView(finalX, initTop + mHeight, SCROLL_DURATION, type);
         }
     }
 
