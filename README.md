@@ -24,7 +24,7 @@ SwipeCardsView
 
 ```groovy
 dependencies {
-   compile 'com.huxq17.android:SwipeCardsView:0.0.5'
+   compile 'com.huxq17.android:SwipeCardsView:1.0.0'
    //依赖下面的库
    compile 'com.android.support:appcompat-v7:23.0.1'
 }
@@ -75,12 +75,12 @@ dependencies {
 1、抽象类
 ```java
 public abstract class BaseCardAdapter<T> {
-    /**
-     * 获取将要绑定在卡片上的数据集
-     *
-     * @return
-    */
-    public abstract List<T> getData();
+   /**
+        * 获取卡片的数量
+        *
+        * @return
+       */
+       public abstract int getCount();
 
     /**
      * 获取卡片view的layout id
@@ -94,9 +94,8 @@ public abstract class BaseCardAdapter<T> {
      *
      * @param position 数据在数据集中的位置
      * @param cardview 要绑定数据的卡片
-     * @param data     数据集中对应位置的数据
      */
-    public abstract void onBindData(int position, View cardview, T data);
+    public abstract void onBindData(int position, View cardview);
 
     /**
      * 获取可见的cardview的数目，默认是3
@@ -118,9 +117,9 @@ public class MeiziAdapter extends BaseCardAdapter {
         this.context = context;
     }
 
-    @Override
-    public List getData() {
-        return datas;
+   @Override
+    public int getCount() {
+        return datas.size();
     }
 
     @Override
@@ -129,7 +128,7 @@ public class MeiziAdapter extends BaseCardAdapter {
     }
 
     @Override
-    public void onBindData(int position, View cardview, Object data) {
+    public void onBindData(int position, View cardview) {
         if (datas == null || datas.size() == 0) {
             return;
         }
@@ -167,7 +166,16 @@ public class MeiziAdapter extends BaseCardAdapter {
     public void doRightOut() {
         swipeCardsView.slideCardOut(SwipeCardsView.SlideType.RIGHT);
     }
-
+    /**
+     * 从头开始，重新浏览
+     */
+    public void doRetry() {
+        //必须先改变adapter中的数据，然后才能由数据变化带动页面刷新
+        if (mList != null) {
+            adapter.setData(mList);
+            swipeCardsView.notifyDatasetChanged(0);
+        }
+    }
     /**
      * 显示cardsview
      */
@@ -176,7 +184,9 @@ public class MeiziAdapter extends BaseCardAdapter {
             adapter = new MeiziAdapter(mList, getActivity());
             swipeCardsView.setAdapter(adapter);
         } else {
-            swipeCardsView.notifyDatasetChanged(mList);
+           //if you want to change the UI of SwipeCardsView,you must modify the data first
+           adapter.setData(mList);
+           swipeCardsView.notifyDatasetChanged(curIndex);
         }
     }
 

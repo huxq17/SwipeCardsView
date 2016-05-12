@@ -132,6 +132,7 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
             adapter = new MeiziAdapter(mList, getActivity());
             swipeCardsView.setAdapter(adapter);
         } else {
+            //if you want to change the UI of SwipeCardsView,you must modify the data first
             adapter.setData(mList);
             swipeCardsView.notifyDatasetChanged(curIndex);
         }
