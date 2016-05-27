@@ -59,6 +59,10 @@ public class SwipeCardsView extends LinearLayout {
     private boolean isTouching = false;
     private int tempShowingIndex = -1;
     private int cardVisibleCount = 3;
+    /**
+     * 卡片是否在移动的标记，如果在移动中则不执行onLayout中的layout操作
+     */
+    private boolean mScrolling = false;
 
     public SwipeCardsView(Context context) {
         this(context, null);
@@ -132,10 +136,10 @@ public class SwipeCardsView extends LinearLayout {
      */
     public void notifyDatasetChanged(int index) {
         if (canResetView()) {
-            LogUtil.d("test notifyDatasetChanged canResetView="+index);
+            LogUtil.d("test notifyDatasetChanged canResetView=" + index);
             refreshUI(index);
         } else {
-            LogUtil.d("test notifyDatasetChanged can not Reset View="+index);
+            LogUtil.d("test notifyDatasetChanged can not Reset View=" + index);
             mWaitRefresh = true;
             tempShowingIndex = index;
         }
@@ -282,11 +286,13 @@ public class SwipeCardsView extends LinearLayout {
     }
 
     private void releaseTopView(float xvel, float yvel) {
+        mScrolling = true;
         View topView = getTopView();
-        LogUtil.i("test start releaseTopView topView="+topView);
+        LogUtil.i("test start releaseTopView topView=" + topView);
         if (topView != null) {
             onTopViewReleased(topView, xvel, yvel);
-        } LogUtil.i("test end releaseTopView topView="+topView);
+        }
+        LogUtil.i("test end releaseTopView topView=" + topView);
 
     }
 
@@ -332,6 +338,7 @@ public class SwipeCardsView extends LinearLayout {
     public void startScrollTopView(int finalLeft, int finalTop, int duration, SlideType flyType) {
         View topView = getTopView();
         if (topView == null) {
+            mScrolling = false;
             return;
         }
         if (finalLeft != initLeft) {
@@ -344,6 +351,8 @@ public class SwipeCardsView extends LinearLayout {
         if (dx != 0 || dy != 0) {
             mScroller.startScroll(topView.getLeft(), topView.getTop(), dx, dy, duration);
             ViewCompat.postInvalidateOnAnimation(this);
+        } else {
+            mScrolling = false;
         }
         if (flyType != SlideType.NONE && mCardsSlideListener != null) {
             mCardsSlideListener.onCardVanish(showingIndex, flyType);
@@ -405,7 +414,7 @@ public class SwipeCardsView extends LinearLayout {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        if (hasTouchTopView||mScroller.computeScrollOffset()) {
+        if (hasTouchTopView || mScrolling) {
             return;
         }
         int size = viewList.size();
@@ -421,7 +430,7 @@ public class SwipeCardsView extends LinearLayout {
         initTop = viewList.get(0).getTop();
         mCardWidth = viewList.get(0).getMeasuredWidth();
         View topView = getTopView();
-        LogUtil.i("test onLayout initLeft="+initLeft+"; topView="+topView);
+        LogUtil.i("test onLayout initLeft=" + initLeft + "; topView=" + topView);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -479,7 +488,6 @@ public class SwipeCardsView extends LinearLayout {
 
     @Override
     public void computeScroll() {
-        LogUtil.d("test computeScroll mScroller.computeScrollOffset()="+mScroller.computeScrollOffset());
         if (mScroller.computeScrollOffset()) {
             View topView = getTopView();
             if (topView == null) {
@@ -494,6 +502,7 @@ public class SwipeCardsView extends LinearLayout {
             }
             ViewCompat.postInvalidateOnAnimation(this);
         } else {
+            mScrolling = false;
             onAnimalStop();
         }
     }
@@ -513,6 +522,7 @@ public class SwipeCardsView extends LinearLayout {
      */
     private void resetViewGroup() {
         if (releasedViewList.size() == 0) {
+            mScrolling = false;
             if (mWaitRefresh) {
                 mWaitRefresh = false;
                 refreshUI(tempShowingIndex);
@@ -529,24 +539,25 @@ public class SwipeCardsView extends LinearLayout {
         } else {
             View changedView = releasedViewList.get(0);
             if (changedView.getLeft() == initLeft) {
-                LogUtil.i("test changedView="+changedView+";changedView.getLeft() == initLeft left="+initLeft+";scalex="+changedView.getScaleX());
                 releasedViewList.remove(0);
+                mScrolling = false;
                 return;
             }
+            viewList.remove(changedView);
+            viewList.add(changedView);
+            mScrolling = false;
             int viewSize = viewList.size();
             removeViewInLayout(changedView);
             addViewInLayout(changedView, 0, changedView.getLayoutParams(), true);
             requestLayout();
 //            removeView(changedView);
 //            addView(changedView,0);
-            viewList.remove(changedView);
-            viewList.add(changedView);
             if (mWaitRefresh) {
                 mWaitRefresh = false;
                 int index = ++tempShowingIndex;
                 refreshUI(index);
             } else {
-                int newIndex = showingIndex + viewSize ;
+                int newIndex = showingIndex + viewSize;
                 if (newIndex < mCount) {
                     bindCardData(newIndex, changedView);
                 } else {

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.andbase.tractor.utils.LogUtils;
 import com.huxq17.example.MainActivity;
 import com.huxq17.example.R;
 import com.huxq17.example.adapter.MeiziAdapter;
@@ -80,7 +81,7 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
             @Override
             public void onShow(int index) {
                 curIndex = index;
-//                LogUtils.i("test showing index = " + index);
+                LogUtils.i("test showing index = " + index);
             }
 
             @Override
