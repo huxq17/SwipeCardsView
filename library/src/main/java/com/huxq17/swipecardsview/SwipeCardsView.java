@@ -90,7 +90,6 @@ public class SwipeCardsView extends LinearLayout {
         mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
         mMaxVelocity = ViewConfiguration.get(getContext()).getScaledMaximumFlingVelocity();
         mMinVelocity = ViewConfiguration.get(getContext()).getScaledMinimumFlingVelocity();
-
     }
 
     /**
@@ -133,8 +132,10 @@ public class SwipeCardsView extends LinearLayout {
      */
     public void notifyDatasetChanged(int index) {
         if (canResetView()) {
+            LogUtil.d("test notifyDatasetChanged canResetView="+index);
             refreshUI(index);
         } else {
+            LogUtil.d("test notifyDatasetChanged can not Reset View="+index);
             mWaitRefresh = true;
             tempShowingIndex = index;
         }
@@ -281,10 +282,12 @@ public class SwipeCardsView extends LinearLayout {
     }
 
     private void releaseTopView(float xvel, float yvel) {
-        View TopView = getTopView();
-        if (TopView != null) {
-            onTopViewReleased(TopView, xvel, yvel);
-        }
+        View topView = getTopView();
+        LogUtil.i("test start releaseTopView topView="+topView);
+        if (topView != null) {
+            onTopViewReleased(topView, xvel, yvel);
+        } LogUtil.i("test end releaseTopView topView="+topView);
+
     }
 
     /**
@@ -402,7 +405,7 @@ public class SwipeCardsView extends LinearLayout {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        if (hasTouchTopView) {
+        if (hasTouchTopView||mScroller.computeScrollOffset()) {
             return;
         }
         int size = viewList.size();
@@ -417,6 +420,8 @@ public class SwipeCardsView extends LinearLayout {
         initLeft = viewList.get(0).getLeft();
         initTop = viewList.get(0).getTop();
         mCardWidth = viewList.get(0).getMeasuredWidth();
+        View topView = getTopView();
+        LogUtil.i("test onLayout initLeft="+initLeft+"; topView="+topView);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -474,6 +479,7 @@ public class SwipeCardsView extends LinearLayout {
 
     @Override
     public void computeScroll() {
+        LogUtil.d("test computeScroll mScroller.computeScrollOffset()="+mScroller.computeScrollOffset());
         if (mScroller.computeScrollOffset()) {
             View topView = getTopView();
             if (topView == null) {
@@ -522,10 +528,11 @@ public class SwipeCardsView extends LinearLayout {
             }
         } else {
             View changedView = releasedViewList.get(0);
-//            if (changedView.getLeft() == initLeft) {
-//                releasedViewList.remove(0);
-//                return;
-//            }
+            if (changedView.getLeft() == initLeft) {
+                LogUtil.i("test changedView="+changedView+";changedView.getLeft() == initLeft left="+initLeft+";scalex="+changedView.getScaleX());
+                releasedViewList.remove(0);
+                return;
+            }
             int viewSize = viewList.size();
             removeViewInLayout(changedView);
             addViewInLayout(changedView, 0, changedView.getLayoutParams(), true);
@@ -622,10 +629,12 @@ public class SwipeCardsView extends LinearLayout {
             finalX = mWidth;
             finalY = dy * (mCardWidth + initLeft) / dx + initTop;
             flyType = SlideType.RIGHT;
+            LogUtil.i("test 向右边滑出");
         } else if (dx < -X_DISTANCE_THRESHOLD || (xvel < -X_VEL_THRESHOLD && dx < 0)) {//向左边滑出
             finalX = -mCardWidth;
             finalY = dy * (mCardWidth + initLeft) / (-dx) + dy + initTop;
             flyType = SlideType.LEFT;
+            LogUtil.i("test 向左边滑出");
         }
 
         if (finalY > mHeight) {

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.huxq17.example.R;
 import com.huxq17.example.bean.ContentBean;
 import com.huxq17.swipecardsview.BaseCardAdapter;
+import com.huxq17.swipecardsview.LogUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class MeiziAdapter extends BaseCardAdapter {
         if (datas == null || datas.size() == 0) {
             return;
         }
+        LogUtil.d("onBindData position="+position);
         ImageView imageView = (ImageView) cardview.findViewById(R.id.iv_meizi);
         ContentBean meizi = datas.get(position);
         String url = meizi.getUrl();
