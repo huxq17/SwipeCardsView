@@ -5,6 +5,7 @@ import android.content.Context;
 import com.andbase.tractor.listener.impl.LoadListenerImpl;
 import com.andbase.tractor.task.Task;
 import com.andbase.tractor.task.TaskPool;
+import com.andbase.tractor.utils.LogUtils;
 import com.huxq17.example.bean.ContentBean;
 import com.huxq17.example.bean.MeiziBean;
 import com.huxq17.example.http.HttpSender;
@@ -143,6 +144,7 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
     }
 
     private List<ContentBean> getContent(Task task, String url, int groupid, Object tag) {
+        LogUtils.i("getcontent url="+url);
         List<ContentBean> list = new ArrayList<>();
         HttpResponse httpResponse = HttpSender.instance().getSync(url, null, null, tag);
         String html = httpResponse.string();
@@ -160,7 +162,6 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
                     isFirst = false;
                     firstList.addAll(list);
                     task.notifyLoading(list);
-
                 }
             }
         }
@@ -170,7 +171,7 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
     private int getCount(String html) {
         Document doc = Jsoup.parse(html);
         Elements pages = doc.select("span");
-        Element page = pages.get(11);
+        Element page = pages.get(10);
 
         Pattern p = Pattern.compile("[\\d*]");
         Matcher m = p.matcher(page.toString());

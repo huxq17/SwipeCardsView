@@ -218,6 +218,8 @@ public class MeiziAdapter extends BaseCardAdapter {
             }
         });
 ```
+## ps:所用的数据是从别的网站上爬下来的，所以网站数据结构变化会导致demo崩掉。因为这只是个demo我就没有做特殊的处理，
+崩掉以后如果发现了我会及时改过来，如果没有的话，建议直接看使用说明，不一定要把demo跑起来。
 
 ## License
 
