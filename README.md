@@ -24,7 +24,7 @@ SwipeCardsView
 
 ```groovy
 dependencies {
-   compile 'com.huxq17.android:SwipeCardsView:1.0.0'
+   compile 'com.huxq17.android:SwipeCardsView:1.1.0'
    //依赖下面的库
    compile 'com.android.support:appcompat-v7:23.0.1'
 }
