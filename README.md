@@ -221,7 +221,7 @@ public class MeiziAdapter extends BaseCardAdapter {
 
 ### 更新日志：<br/>
     2016-8-15：
-    1.Fix #9 and you can call retainLastCard method to retain the last card.
+    1.Fix [#9](https://github.com/huxq17/SwipeCardsView/issues/9) and you can call retainLastCard method to retain the last card.
     2.SwipeCardsView will not call onShow method when has no card showing.
 
 ###PS:
