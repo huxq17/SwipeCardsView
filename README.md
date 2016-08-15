@@ -24,7 +24,7 @@ SwipeCardsView
 
 ```groovy
 dependencies {
-   compile 'com.huxq17.android:SwipeCardsView:1.2.0'
+   compile 'com.huxq17.android:SwipeCardsView:1.3.0'
    //依赖下面的库
    compile 'com.android.support:appcompat-v7:23.0.1'
 }
@@ -218,8 +218,15 @@ public class MeiziAdapter extends BaseCardAdapter {
             }
         });
 ```
-ps:所用的数据是从别的网站上爬下来的，所以网站数据结构变化会导致demo崩掉。因为这只是个demo我就没有做特殊的处理，
-崩掉以后如果发现了我会及时改过来，如果app崩掉或者没有数据的话，建议直接看使用说明，不一定要把demo跑起来。
+
+### 更新日志：<br/>
+    2016-8-15：
+    1.Fix #9 and you can call retainLastCard method to retain the last card.
+    2.SwipeCardsView will not call onShow method when has no card showing.
+
+###PS:
+    所用的数据是从别的网站上爬下来的，所以网站数据结构变化会导致demo崩掉。因为这只是个demo我就没有做特殊的处理，
+    崩掉以后如果发现了我会及时改过来，如果app崩掉或者没有数据的话，建议直接看使用说明，不一定要把demo跑起来。
 
 ## License
 

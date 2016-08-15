@@ -75,6 +75,8 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         floatingActionButton = (FloatingActionButton) container.findViewById(R.id.fab);
         activity = (MainActivity) getActivity();
         activity.setSupportActionBar(toolbar);
+        //whether retain last card,defalut false
+        swipeCardsView.retainLastCard(false);
         getData();
         //设置滑动监听
         swipeCardsView.setCardsSlideListener(new SwipeCardsView.CardsSlideListener() {
@@ -112,10 +114,10 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
 
     @Override
     public void dealDataResponse(List<ContentBean> bean, boolean success) {
-//        if (bean != null) {
-//            mList = bean;
-//            show();
-//        }
+        if (bean != null) {
+            mList = bean;
+            show();
+        }
     }
 
     @Override

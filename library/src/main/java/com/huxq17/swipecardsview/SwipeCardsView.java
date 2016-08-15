@@ -40,7 +40,7 @@ public class SwipeCardsView extends LinearLayout {
 
     private CardsSlideListener mCardsSlideListener; // 回调接口
     private int mCount; // 卡片的数量
-    private int showingIndex = 0; // 当前正在显示的卡片位置
+    private int mShowingIndex = 0; // 当前正在显示的卡片位置
     private OnClickListener btnListener;
 
     private BaseCardAdapter mAdapter;
@@ -86,7 +86,7 @@ public class SwipeCardsView extends LinearLayout {
             public void onClick(View view) {
                 // 点击的是卡片
                 if (null != mCardsSlideListener && view.getScaleX() > 1 - scaleOffsetStep) {
-                    mCardsSlideListener.onItemClick(view, showingIndex);
+                    mCardsSlideListener.onItemClick(view, mShowingIndex);
                 }
             }
         };
@@ -149,12 +149,12 @@ public class SwipeCardsView extends LinearLayout {
         if (mAdapter == null) {
             throw new RuntimeException("adapter==null");
         }
-        showingIndex = index;
+        mShowingIndex = index;
         mCount = mAdapter.getCount();
 //        cardVisibleCount = mAdapter.getVisibleCardCount();
         cardVisibleCount = Math.min(cardVisibleCount, mCount);
-        for (int i = showingIndex; i < showingIndex + cardVisibleCount; i++) {
-            View childView = viewList.get(i - showingIndex);
+        for (int i = mShowingIndex; i < mShowingIndex + cardVisibleCount; i++) {
+            View childView = viewList.get(i - mShowingIndex);
             if (childView == null) {
                 return;
             }
@@ -166,7 +166,7 @@ public class SwipeCardsView extends LinearLayout {
             childView.setOnClickListener(btnListener);
         }
         if (null != mCardsSlideListener) {
-            mCardsSlideListener.onShow(showingIndex);
+            mCardsSlideListener.onShow(mShowingIndex);
         }
     }
 
@@ -176,13 +176,13 @@ public class SwipeCardsView extends LinearLayout {
             throw new RuntimeException("adapter==null");
         }
         mAdapter = adapter;
-        showingIndex = 0;
+        mShowingIndex = 0;
         removeAllViewsInLayout();
         viewList.clear();
         mCount = mAdapter.getCount();
         int cardVisibleCount = mAdapter.getVisibleCardCount();
         cardVisibleCount = Math.min(cardVisibleCount, mCount);
-        for (int i = showingIndex; i < showingIndex + cardVisibleCount; i++) {
+        for (int i = mShowingIndex; i < mShowingIndex + cardVisibleCount; i++) {
             View childView = LayoutInflater.from(getContext()).inflate(getCardLayoutId(mAdapter.getCardLayoutId()), this, false);
             if (childView == null) {
                 return;
@@ -197,8 +197,22 @@ public class SwipeCardsView extends LinearLayout {
             addView(childView, 0);
         }
         if (null != mCardsSlideListener) {
-            mCardsSlideListener.onShow(showingIndex);
+            mCardsSlideListener.onShow(mShowingIndex);
         }
+    }
+
+    private boolean mRetainLastCard = false;
+
+    /**
+     * whether retain last card
+     * @param retain defalut false
+     */
+    public void retainLastCard(boolean retain) {
+        mRetainLastCard = retain;
+    }
+
+    private boolean canMoveCard() {
+        return !mRetainLastCard || mRetainLastCard && mShowingIndex != mCount - 1;
     }
 
     @Override
@@ -211,7 +225,7 @@ public class SwipeCardsView extends LinearLayout {
             case MotionEvent.ACTION_DOWN:
                 mScroller.abortAnimation();
                 resetViewGroup();
-                if (isTouchTopView(ev)) {
+                if (isTouchTopView(ev) && canMoveCard()) {
                     isTouching = true;
                 }
                 hasTouchTopView = false;
@@ -221,6 +235,9 @@ public class SwipeCardsView extends LinearLayout {
                 mInitialMotionX = mLastX;
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (!canMoveCard()) {
+                    return super.dispatchTouchEvent(ev);
+                }
                 mLastMoveEvent = ev;
                 int currentY = (int) ev.getRawY();
                 int currentX = (int) ev.getRawX();
@@ -288,7 +305,7 @@ public class SwipeCardsView extends LinearLayout {
     private void releaseTopView(float xvel, float yvel) {
         mScrolling = true;
         View topView = getTopView();
-        if (topView != null) {
+        if (topView != null && canMoveCard()) {
             onTopViewReleased(topView, xvel, yvel);
         }
 
@@ -353,7 +370,7 @@ public class SwipeCardsView extends LinearLayout {
             mScrolling = false;
         }
         if (flyType != SlideType.NONE && mCardsSlideListener != null) {
-            mCardsSlideListener.onCardVanish(showingIndex, flyType);
+            mCardsSlideListener.onCardVanish(mShowingIndex, flyType);
         }
     }
 
@@ -553,17 +570,20 @@ public class SwipeCardsView extends LinearLayout {
                 int index = ++tempShowingIndex;
                 refreshUI(index);
             } else {
-                int newIndex = showingIndex + viewSize;
+                int newIndex = mShowingIndex + viewSize;
                 if (newIndex < mCount) {
                     bindCardData(newIndex, changedView);
                 } else {
                     changedView.setVisibility(View.GONE);
                 }
-                if (showingIndex + 1 < mCount) {
-                    showingIndex++;
-                }
-                if (null != mCardsSlideListener) {
-                    mCardsSlideListener.onShow(showingIndex);
+                if (mShowingIndex + 1 < mCount) {
+                    mShowingIndex++;
+                    if (null != mCardsSlideListener) {
+                        mCardsSlideListener.onShow(mShowingIndex);
+                    }
+                } else {
+                    //no card showing
+                    mShowingIndex = -1;
                 }
             }
             releasedViewList.remove(0);
@@ -656,6 +676,9 @@ public class SwipeCardsView extends LinearLayout {
      * @param type {@link com.huxq17.swipecardsview.SwipeCardsView.SlideType}
      */
     public void slideCardOut(SlideType type) {
+        if (!canMoveCard()) {
+            return;
+        }
         mScroller.abortAnimation();
         resetViewGroup();
         View topview = getTopView();
