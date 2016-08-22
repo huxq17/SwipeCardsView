@@ -85,7 +85,7 @@ public class SwipeCardsView extends LinearLayout {
             @Override
             public void onClick(View view) {
                 // 点击的是卡片
-                if (null != mCardsSlideListener && view.getScaleX() > 1 - scaleOffsetStep) {
+                if (null != mCardsSlideListener && view.getScaleX() == 1f) {
                     mCardsSlideListener.onItemClick(view, mShowingIndex);
                 }
             }
@@ -163,13 +163,18 @@ public class SwipeCardsView extends LinearLayout {
             } else {
                 childView.setVisibility(View.GONE);
             }
-            childView.setOnClickListener(btnListener);
+            setOnItemClickListener(childView);
         }
         if (null != mCardsSlideListener) {
             mCardsSlideListener.onShow(mShowingIndex);
         }
     }
 
+    private void setOnItemClickListener(View childView) {
+        if(null != mCardsSlideListener){
+            childView.setOnClickListener(btnListener);
+        }
+    }
 
     public void setAdapter(BaseCardAdapter adapter) {
         if (adapter == null) {
@@ -193,7 +198,7 @@ public class SwipeCardsView extends LinearLayout {
                 childView.setVisibility(View.GONE);
             }
             viewList.add(childView);
-            childView.setOnClickListener(btnListener);
+            setOnItemClickListener(childView);
             addView(childView, 0);
         }
         if (null != mCardsSlideListener) {
@@ -205,6 +210,7 @@ public class SwipeCardsView extends LinearLayout {
 
     /**
      * whether retain last card
+     *
      * @param retain defalut false
      */
     public void retainLastCard(boolean retain) {
