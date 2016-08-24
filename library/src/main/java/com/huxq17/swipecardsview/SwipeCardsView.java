@@ -84,7 +84,6 @@ public class SwipeCardsView extends LinearLayout {
         btnListener = new OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 点击的是卡片
                 if (null != mCardsSlideListener && view.getScaleX() == 1f) {
                     mCardsSlideListener.onItemClick(view, mShowingIndex);
                 }
