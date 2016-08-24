@@ -22,7 +22,7 @@ SwipeCardsView
 
 ###下载
 
-[点击下载apk](apk/app_v1.3.1.apk)
+[点击下载apk,体验效果](apk/app_v1.3.1.apk)
 
 ###Gradle
 
