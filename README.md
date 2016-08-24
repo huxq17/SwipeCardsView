@@ -20,6 +20,10 @@ SwipeCardsView
  2. 灵活，可以通过设置几个属性，很容易就能定制可视卡片的数量和卡片的叠加垂直偏移量、缩放比例，透明度比例；
  3. 使用方便，直接setadapter就可以使用了，数据更新调用swipeCardsView.notifyDatasetChanged(index);就行了，下面有使用说明。
 
+###下载
+
+[点击下载apk](apk/app_v1.3.1.apk)
+
 ###Gradle
 
 ```groovy
