@@ -1,5 +1,5 @@
 # SwipeCardsView
-SwipeCardsView
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-SwipeCardsView-green.svg?style=true)](https://android-arsenal.com/details/1/4247)
 ### 来由
 之所以做这个效果是因为项目中有这个效果需要实现。
 
