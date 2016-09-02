@@ -228,7 +228,7 @@ public class MeiziAdapter extends BaseCardAdapter {
 
 ### 更新日志：<br/>
     2016-9-2：
-    1.support to disable swipe feature by invoking enableSwipe(false) method.
+    1.Support to disable swipe feature by invoking enableSwipe(false) method.
 
     2016-8-15：
     1.解决当设置scaleOffsetStep为负数时，onItemClick回调不会触发的问题.
