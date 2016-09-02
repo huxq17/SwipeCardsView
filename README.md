@@ -1,5 +1,5 @@
 # SwipeCardsView
-SwipeCardsView
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-SwipeCardsView-green.svg?style=true)](https://android-arsenal.com/details/1/4247)
 ### 来由
 之所以做这个效果是因为项目中有这个效果需要实现。
 
@@ -22,7 +22,7 @@ SwipeCardsView
 
 ###下载
 
-[点击下载apk,体验效果](apk/app_v1.3.1.apk)
+[点击下载apk,体验效果](https://raw.githubusercontent.com/huxq17/SwipeCardsView/master/apk/app_v1.3.1.apk)
 
 ###Gradle
 
