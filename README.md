@@ -28,7 +28,7 @@ SwipeCardsView
 
 ```groovy
 dependencies {
-   compile 'com.huxq17.android:SwipeCardsView:1.3.1'
+   compile 'com.huxq17.android:SwipeCardsView:1.3.2'
    //依赖下面的库
    compile 'com.android.support:appcompat-v7:23.0.1'
 }
@@ -195,6 +195,8 @@ public class MeiziAdapter extends BaseCardAdapter {
     }
         //保留最后一张卡片，具体请看[#9](https://github.com/huxq17/SwipeCardsView/issues/9)
         swipeCardsView.retainLastCard(true);
+        //Pass false if you want to disable swipe feature,or do nothing.
+        //swipeCardsView.enableSwipe(false);
 	  ...省略部分代码...
         swipeCardsView = (SwipeCardsView) container.findViewById(R.id.swipCardsView);
 	   //设置滑动监听
@@ -225,6 +227,9 @@ public class MeiziAdapter extends BaseCardAdapter {
 ```
 
 ### 更新日志：<br/>
+    2016-9-2：
+    1.support to disable swipe feature by invoking enableSwipe(false) method.
+
     2016-8-15：
     1.解决当设置scaleOffsetStep为负数时，onItemClick回调不会触发的问题.
 

@@ -77,6 +77,8 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
         activity.setSupportActionBar(toolbar);
         //whether retain last card,defalut false
         swipeCardsView.retainLastCard(true);
+        //Pass false if you want to disable swipe feature,or do nothing.
+        swipeCardsView.enableSwipe(true);
         getData();
         //设置滑动监听
         swipeCardsView.setCardsSlideListener(new SwipeCardsView.CardsSlideListener() {

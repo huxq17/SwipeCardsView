@@ -170,7 +170,7 @@ public class SwipeCardsView extends LinearLayout {
     }
 
     private void setOnItemClickListener(View childView) {
-        if(null != mCardsSlideListener){
+        if (null != mCardsSlideListener) {
             childView.setOnClickListener(btnListener);
         }
     }
@@ -220,6 +220,12 @@ public class SwipeCardsView extends LinearLayout {
         return !mRetainLastCard || mRetainLastCard && mShowingIndex != mCount - 1;
     }
 
+    private boolean mEnableSwipe = true;
+
+    public void enableSwipe(boolean enable) {
+        mEnableSwipe = enable;
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         final int action = ev.getActionMasked();
@@ -230,7 +236,7 @@ public class SwipeCardsView extends LinearLayout {
             case MotionEvent.ACTION_DOWN:
                 mScroller.abortAnimation();
                 resetViewGroup();
-                if (isTouchTopView(ev) && canMoveCard()) {
+                if (isTouchTopView(ev) && canMoveCard() && mEnableSwipe) {
                     isTouching = true;
                 }
                 hasTouchTopView = false;
@@ -240,7 +246,7 @@ public class SwipeCardsView extends LinearLayout {
                 mInitialMotionX = mLastX;
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (!canMoveCard()) {
+                if (!canMoveCard() || !mEnableSwipe) {
                     return super.dispatchTouchEvent(ev);
                 }
                 mLastMoveEvent = ev;
@@ -310,7 +316,7 @@ public class SwipeCardsView extends LinearLayout {
     private void releaseTopView(float xvel, float yvel) {
         mScrolling = true;
         View topView = getTopView();
-        if (topView != null && canMoveCard()) {
+        if (topView != null && canMoveCard() && mEnableSwipe) {
             onTopViewReleased(topView, xvel, yvel);
         }
 
