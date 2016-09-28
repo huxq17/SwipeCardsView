@@ -333,8 +333,8 @@ public class SwipeCardsView extends LinearLayout {
         if (topView != null && topView.getVisibility() == VISIBLE) {
             Rect bounds = new Rect();
             topView.getGlobalVisibleRect(bounds);
-            int x = (int) ev.getX();
-            int y = (int) ev.getY();
+            int x = (int) ev.getRawX();
+            int y = (int) ev.getRawY();
             if (bounds.contains(x, y)) {
                 return true;
             } else {
