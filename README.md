@@ -28,7 +28,7 @@
 
 ```groovy
 dependencies {
-   compile 'com.huxq17.android:SwipeCardsView:1.3.2'
+   compile 'com.huxq17.android:SwipeCardsView:1.3.3'
    //依赖下面的库
    compile 'com.android.support:appcompat-v7:23.0.1'
 }
@@ -227,6 +227,9 @@ public class MeiziAdapter extends BaseCardAdapter {
 ```
 
 ### 更新日志：<br/>
+    2016-9-28：
+    1.fix issue #13.
+    
     2016-9-2：
     1.Support to disable swipe feature by invoking enableSwipe(false) method.
 
