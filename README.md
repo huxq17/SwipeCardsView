@@ -228,7 +228,7 @@ public class MeiziAdapter extends BaseCardAdapter {
 
 ### 更新日志：<br/>
     2016-9-28：
-    1.fix issue #13,and update to 1.3.3 version.
+    1.Fix issue #13,and update to 1.3.3 version.
 
     2016-9-2：
     1.Support to disable swipe feature by invoking enableSwipe(false) method.
