@@ -140,11 +140,12 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
             task.notifyLoading(block);
             contentBeanList.addAll(block);
         }
+        contentBeanList.addAll(0,firstList);
         return contentBeanList;
     }
 
     private List<ContentBean> getContent(Task task, String url, int groupid, Object tag) {
-        LogUtils.i("getcontent url="+url);
+        LogUtils.i("getcontent url=" + url);
         List<ContentBean> list = new ArrayList<>();
         HttpResponse httpResponse = HttpSender.instance().getSync(url, null, null, tag);
         String html = httpResponse.string();
