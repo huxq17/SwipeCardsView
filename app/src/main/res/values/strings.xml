@@ -4,4 +4,5 @@
     <string name="action_left">向左边滑出</string>
     <string name="action_right">向右边滑出</string>
     <string name="action_retry">重新开始</string>
+    <string name="action_pre">上一张</string>
 </resources>

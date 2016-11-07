@@ -58,6 +58,21 @@ public class MeiziFragment extends UltraPagerFragment<ContentBean, MeiziPresente
     /**
      * 从头开始，重新浏览
      */
+    public void swipeToPre() {
+        //必须先改变adapter中的数据，然后才能由数据变化带动页面刷新
+        if (mList != null) {
+            adapter.setData(mList);
+            if (curIndex > 0) {
+                swipeCardsView.notifyDatasetChanged(curIndex - 1);
+            }else{
+                toast("已经是第一张卡片了");
+            }
+        }
+    }
+
+    /**
+     * 从头开始，重新浏览
+     */
     public void doRetry() {
         //必须先改变adapter中的数据，然后才能由数据变化带动页面刷新
         if (mList != null) {

@@ -39,6 +39,8 @@ public class MainActivity extends BaseActivity {
             return true;
         }else if(id==R.id.action_retry){
            meiziFragment.doRetry();
+       }else if(id==R.id.action_pre){
+           meiziFragment.swipeToPre();
        }
 
         return super.onOptionsItemSelected(item);

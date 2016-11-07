@@ -135,10 +135,10 @@ public class SwipeCardsView extends LinearLayout {
      */
     public void notifyDatasetChanged(int index) {
         if (canResetView()) {
-            LogUtil.d("test notifyDatasetChanged canResetView=" + index);
+//            LogUtil.d("test notifyDatasetChanged canResetView=" + index);
             refreshUI(index);
         } else {
-            LogUtil.d("test notifyDatasetChanged can not Reset View=" + index);
+//            LogUtil.d("test notifyDatasetChanged can not Reset View=" + index);
             mWaitRefresh = true;
             tempShowingIndex = index;
         }

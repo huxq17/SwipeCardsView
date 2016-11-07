@@ -13,6 +13,11 @@
         android:title="@string/action_right"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_pre"
+        android:orderInCategory="100"
+        android:title="@string/action_pre"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_retry"
         android:orderInCategory="100"
         android:title="@string/action_retry"
