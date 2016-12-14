@@ -28,7 +28,7 @@
 
 ```groovy
 dependencies {
-   compile 'com.huxq17.android:SwipeCardsView:1.3.3'
+   compile 'com.huxq17.android:SwipeCardsView:1.3.4'
    //依赖下面的库
    compile 'com.android.support:appcompat-v7:23.0.1'
 }
@@ -227,7 +227,7 @@ public class MeiziAdapter extends BaseCardAdapter {
 ```
 
 ### 更新日志：<br/>
- 2016-9-28：
+    2016-12-14：
     1.升级到1.3.4,解决在setCardsSlideListener之前设置setAdapter时卡片不能滑动的问题.
 
     2016-9-28：
