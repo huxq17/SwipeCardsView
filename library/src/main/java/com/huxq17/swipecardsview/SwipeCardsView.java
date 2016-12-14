@@ -93,6 +93,7 @@ public class SwipeCardsView extends LinearLayout {
         mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
         mMaxVelocity = ViewConfiguration.get(getContext()).getScaledMaximumFlingVelocity();
         mMinVelocity = ViewConfiguration.get(getContext()).getScaledMinimumFlingVelocity();
+//        setWillNotDraw(false);
     }
 
     /**
@@ -170,9 +171,7 @@ public class SwipeCardsView extends LinearLayout {
     }
 
     private void setOnItemClickListener(View childView) {
-        if (null != mCardsSlideListener) {
-            childView.setOnClickListener(btnListener);
-        }
+        childView.setOnClickListener(btnListener);
     }
 
     public void setAdapter(BaseCardAdapter adapter) {
@@ -269,6 +268,7 @@ public class SwipeCardsView extends LinearLayout {
                 if (isIntercepted && (hasTouchTopView || isTouchTopView(ev))) {
                     hasTouchTopView = true;
                     moveTopView(deltaX, deltaY);
+//                    invalidate();
                     sendCancelEvent();
                     return true;
                 }
@@ -287,6 +287,7 @@ public class SwipeCardsView extends LinearLayout {
 
                 releaseTopView(xvel, yvel);
                 releaseVelocityTracker();
+//                invalidate();
                 break;
         }
         return super.dispatchTouchEvent(ev);
@@ -309,6 +310,40 @@ public class SwipeCardsView extends LinearLayout {
         }
     }
 
+
+//    @Override
+//    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+//        boolean ret;
+//        int canvasRestore = -1;
+//        int index = indexOfChild(child);
+//        View topView = getTopView();
+//        if (topView != child) {
+//            Rect thisRect = new Rect();
+//            getGlobalVisibleRect(thisRect);
+//            Rect childRect = new Rect();
+//            child.getGlobalVisibleRect(childRect);
+//            childRect.set(childRect.left - thisRect.left, childRect.top - thisRect.top, childRect.left - thisRect.left + childRect.width(), childRect.height() + childRect.top - thisRect.top);
+//            Rect topRect = new Rect();
+//            topView.getGlobalVisibleRect(topRect);
+//            topRect.set(topRect.left - thisRect.left, topRect.top - thisRect.top, topRect.left - thisRect.left + topRect.width(), topRect.height() + topRect.top - thisRect.top);
+//            Rect newrect = new Rect(thisRect.left, topRect.bottom, thisRect.right, child.getBottom());
+//            canvasRestore = canvas.save();
+//            canvas.clipRect(topRect, Region.Op.XOR);
+//
+////            Paint mPaint = new Paint();
+////            mPaint.setAntiAlias(true);
+////            mPaint.setStyle(Paint.Style.STROKE);
+////            mPaint.setColor(Color.RED);
+////            canvas.drawRect(newrect, mPaint);
+//            LogUtil.e("test index=" + index + ";newrect=" + newrect.toShortString() + "child.bottom=" + child.getBottom() + ";thisRect=" + thisRect.toShortString() + ";canvas.getClipBounds()=" + canvas.getClipBounds().toShortString());
+//        }
+//        ret = super.drawChild(canvas, child, drawingTime);
+//        if (canvasRestore != -1) {
+//            canvas.restoreToCount(canvasRestore);
+//        }
+//        return ret;
+//    }
+
     public boolean dispatchTouchEventSupper(MotionEvent e) {
         return super.dispatchTouchEvent(e);
     }
@@ -319,7 +354,6 @@ public class SwipeCardsView extends LinearLayout {
         if (topView != null && canMoveCard() && mEnableSwipe) {
             onTopViewReleased(topView, xvel, yvel);
         }
-
     }
 
     /**
@@ -456,6 +490,7 @@ public class SwipeCardsView extends LinearLayout {
         initTop = viewList.get(0).getTop();
         mCardWidth = viewList.get(0).getMeasuredWidth();
     }
+
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void layoutChild(View child, int index) {

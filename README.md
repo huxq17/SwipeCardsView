@@ -227,6 +227,9 @@ public class MeiziAdapter extends BaseCardAdapter {
 ```
 
 ### 更新日志：<br/>
+ 2016-9-28：
+    1.升级到1.3.4,解决在setCardsSlideListener之前设置setAdapter时卡片不能滑动的问题.
+
     2016-9-28：
     1.Fix issue #13,and update to 1.3.3 version.
 
