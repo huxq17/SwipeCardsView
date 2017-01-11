@@ -10,9 +10,9 @@
  3、还有一点要吐槽下，这个库的使用太麻烦了，耦合太重，集成到项目里比较费事。<br>
 ### 效果图
 <td>
-	 <img src="gif/pic3.gif" width="290" height="485" />
-	 <img src="gif/pic1.gif" width="290" height="485" />
-	 <img src="gif/pic2.gif" width="290" height="485" />
+	 <img src="gif/gif3.gif" width="290" height="485" />
+	 <img src="gif/gif1.gif" width="290" height="485" />
+	 <img src="gif/gif2.gif" width="290" height="485" />
 </td>
 ###特点
 
