@@ -268,7 +268,7 @@ public class SwipeCardsView extends LinearLayout {
                 if (isIntercepted && (hasTouchTopView || isTouchTopView(ev))) {
                     hasTouchTopView = true;
                     moveTopView(deltaX, deltaY);
-//                    invalidate();
+                    invalidate();
                     sendCancelEvent();
                     return true;
                 }
@@ -313,10 +313,11 @@ public class SwipeCardsView extends LinearLayout {
 
 //    @Override
 //    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-//        boolean ret;
+//        boolean ret = false;
 //        int canvasRestore = -1;
 //        int index = indexOfChild(child);
 //        View topView = getTopView();
+//        LogUtil.e("index=" + index + " is topview " + (topView == child));
 //        if (topView != child) {
 //            Rect thisRect = new Rect();
 //            getGlobalVisibleRect(thisRect);
@@ -464,12 +465,22 @@ public class SwipeCardsView extends LinearLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        measureChildren(widthMeasureSpec, heightMeasureSpec);
+        measureChildrenWithMargins(widthMeasureSpec, heightMeasureSpec);
         int maxWidth = MeasureSpec.getSize(widthMeasureSpec);
         int maxHeight = MeasureSpec.getSize(heightMeasureSpec);
         setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, 0), resolveSizeAndState(maxHeight, heightMeasureSpec, 0));
         mWidth = getMeasuredWidth();
         mHeight = getMeasuredHeight();
+    }
+
+    private void measureChildrenWithMargins(int widthMeasureSpec, int heightMeasureSpec) {
+        final int size = getChildCount();
+        for (int i = 0; i < size; ++i) {
+            final View child = getChildAt(i);
+            if (child.getVisibility() != GONE) {
+                measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
+            }
+        }
     }
 
     @Override
