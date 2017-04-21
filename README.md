@@ -14,17 +14,17 @@
 	 <img src="gif/gif1.gif" width="290" height="485" />
 	 <img src="gif/gif2.gif" width="290" height="485" />
 </td>
-###特点
+### 特点
 
  1. 如丝般顺滑，这是公司产品体验过后的评价；
  2. 灵活，可以通过设置几个属性，很容易就能定制可视卡片的数量和卡片的叠加垂直偏移量、缩放比例，透明度比例；
  3. 使用方便，直接setadapter就可以使用了，数据更新调用swipeCardsView.notifyDatasetChanged(index);就行了，下面有使用说明。
 
-###下载
+### 下载
 
 [点击下载apk,体验效果](https://raw.githubusercontent.com/huxq17/SwipeCardsView/master/apk/app_v1.3.1.apk)
 
-###Gradle
+### Gradle
 
 ```groovy
 dependencies {
@@ -33,8 +33,8 @@ dependencies {
    compile 'com.android.support:appcompat-v7:23.0.1'
 }
 ```
-###Example
-####xml：
+### Example
+#### xml：
 ```xml
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -75,7 +75,7 @@ dependencies {
         <attr name="scaleOffsetStep" format="float" />
     </declare-styleable>
 ```
-####adapter：
+#### adapter：
 1、抽象类
 ```java
 public abstract class BaseCardAdapter<T> {
@@ -155,7 +155,7 @@ public class MeiziAdapter extends BaseCardAdapter {
 ```
 
 
-####activity or fragment：
+#### activity or fragment：
 ```java
     /**
      * 卡片向左边飞出
@@ -247,7 +247,7 @@ public class MeiziAdapter extends BaseCardAdapter {
     1.Fix issue #9 and you can call retainLastCard method to retain the last card.
     2.SwipeCardsView will not call onShow method when has no card showing.
 
-###PS:
+### PS:
     所用的数据是从别的网站上爬下来的，所以网站数据结构变化会导致demo崩掉。因为这只是个demo我就没有做特殊的处理，
     崩掉以后如果发现了我会及时改过来，如果app崩掉或者没有数据的话，建议直接看使用说明，不一定要把demo跑起来。
 
