@@ -228,6 +228,9 @@ public class MeiziAdapter extends BaseCardAdapter {
 
 ### 更新日志：<br/>
 
+    2017-5-4：
+    1.网络请求的时候添加User-Agent，解决爬取网页时会返回空的问题.
+
     2017-4-21：
     1.升级到1.3.5,解决对卡片item设置margin对卡片大小没有影响的问题.
 
