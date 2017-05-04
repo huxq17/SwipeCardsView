@@ -1,6 +1,8 @@
 package com.huxq17.example.base;
 
 import android.content.Context;
+import android.os.Build;
+import android.text.TextUtils;
 
 import com.andbase.tractor.listener.impl.LoadListenerImpl;
 import com.andbase.tractor.task.Task;
@@ -20,6 +22,7 @@ import org.jsoup.select.Elements;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -132,6 +135,7 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
             bean.setGroupid(groupId);//首页的这个是从大到小排序的 可以当做排序依据
 //            list.add(bean);
             List<ContentBean> block = getContent(task, bean.getUrl(), groupId, tag);
+            if (block == null) continue;
             if (firstList.size() > 0) {
                 block.removeAll(firstList);
             }
@@ -140,30 +144,35 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
             task.notifyLoading(block);
             contentBeanList.addAll(block);
         }
-        contentBeanList.addAll(0,firstList);
+        contentBeanList.addAll(0, firstList);
         return contentBeanList;
     }
 
     private List<ContentBean> getContent(Task task, String url, int groupid, Object tag) {
-        LogUtils.i("getcontent url=" + url);
+        String agent = System.getProperty("http.agent");
+        LogUtils.d("getcontent url=" + url);
         List<ContentBean> list = new ArrayList<>();
-        HttpResponse httpResponse = HttpSender.instance().getSync(url, null, null, tag);
+        LinkedHashMap header = new LinkedHashMap();
+        header.put("User-Agent", TextUtils.isEmpty(agent) ? String.format("Mozilla/5.0 (Linux; Android %s; %s Build/%s)",
+                Build.VERSION.RELEASE, Build.MANUFACTURER, Build.ID) : agent);
+        HttpResponse httpResponse = HttpSender.instance().getSync(url, header, null, tag);
         String html = httpResponse.string();
-        if (html != null) {
-            int mcount = getCount(html);
-            for (int i = 1; i < mcount + 1; i++) {
-                ContentBean content = null;
-                content = fetchContent(url + "/" + i, tag);
-                if (content != null) {
-                    content.setOrder(groupid + i);
-                    content.setGroupid(groupid);
-                    list.add(content);
-                }
-                if (list.size() >= 20 && isFirst) {
-                    isFirst = false;
-                    firstList.addAll(list);
-                    task.notifyLoading(list);
-                }
+        if (TextUtils.isEmpty(html)) {
+            return null;
+        }
+        int mcount = getCount(html);
+        for (int i = 1; i < mcount + 1; i++) {
+            ContentBean content = null;
+            content = fetchContent(url + "/" + i, tag);
+            if (content != null) {
+                content.setOrder(groupid + i);
+                content.setGroupid(groupid);
+                list.add(content);
+            }
+            if (list.size() >= 20 && isFirst) {
+                isFirst = false;
+                firstList.addAll(list);
+                task.notifyLoading(list);
             }
         }
         return list;
