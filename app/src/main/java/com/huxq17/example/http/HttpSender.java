@@ -10,6 +10,7 @@ import com.huxq17.example.http.response.ResponseType;
 
 import java.io.File;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Created by huxq17 on 2015/11/16.
@@ -27,7 +28,7 @@ public class HttpSender {
 
 
     public void post(final String url,
-                     LinkedHashMap<String, String> headers, final String params,
+                     Map<String, String> headers, final String params,
                      final LoadListener listener, Object... tag) {
         HttpRequest.Builder builder = new HttpRequest.Builder();
         builder.url(url);
@@ -41,7 +42,7 @@ public class HttpSender {
         mHttpBase.post(request, listener, tag);
     }
 
-    public void post(final String url, LinkedHashMap<String, String> headers, LinkedHashMap<String, Object> params,
+    public void post(final String url, Map<String, String> headers, Map<String, Object> params,
                      LoadListener listener, Object... tag) {
         HttpRequest.Builder builder = new HttpRequest.Builder();
         builder.url(url);
@@ -51,7 +52,7 @@ public class HttpSender {
         mHttpBase.post(request, listener, tag);
     }
 
-    public HttpResponse postSync(final String url, LinkedHashMap<String, String> headers, LinkedHashMap<String, Object> params,
+    public HttpResponse postSync(final String url, Map<String, String> headers, Map<String, Object> params,
                    Object... tag) {
         HttpRequest.Builder builder = new HttpRequest.Builder();
         builder.url(url);
@@ -61,7 +62,7 @@ public class HttpSender {
         return mHttpBase.post(request, null, tag);
     }
 
-    public void get(String url, LinkedHashMap<String, String> headers, String params,
+    public void get(String url, Map<String, String> headers, String params,
                     final LoadListener listener, Object... tag) {
         if (!TextUtils.isEmpty(params)) {
             url = url + "?" + params;
@@ -73,7 +74,7 @@ public class HttpSender {
         mHttpBase.get(builder.build(), listener, tag);
     }
 
-    public HttpResponse getInputStreamSync(String url, LinkedHashMap<String, String> headers, String params, Object... tag) {
+    public HttpResponse getInputStreamSync(String url, Map<String, String> headers, String params, Object... tag) {
         if (!TextUtils.isEmpty(params)) {
             url = url + "?" + params;
         }
@@ -82,7 +83,7 @@ public class HttpSender {
         addHeaders(builder, headers);
         return mHttpBase.get(builder.build(), null, tag);
     }
-    public HttpResponse getSync(String url, LinkedHashMap<String, String> headers, String params, Object... tag){
+    public HttpResponse getSync(String url, Map<String, String> headers, String params, Object... tag){
         if (!TextUtils.isEmpty(params)) {
             url = url + "?" + params;
         }
@@ -111,7 +112,7 @@ public class HttpSender {
         return response;
     }
 
-    public void upload(String url, LinkedHashMap<String, String> headers, File[] files, LinkedHashMap<String, Object> params, LoadListener listener, Object tag) {
+    public void upload(String url, Map<String, String> headers, File[] files, Map<String, Object> params, LoadListener listener, Object tag) {
         HttpRequest.Builder builder = new HttpRequest.Builder();
         builder.url(url).setParams(params);
         addHeaders(builder, headers);
@@ -121,7 +122,7 @@ public class HttpSender {
         mHttpBase.post(builder.build(), listener, tag);
     }
 
-    public void upload(String url, LinkedHashMap<String, String> headers, File[] files, LoadListener listener, Object tag) {
+    public void upload(String url, Map<String, String> headers, File[] files, LoadListener listener, Object tag) {
         upload(url, headers, files, null, listener, tag);
     }
 
@@ -137,7 +138,7 @@ public class HttpSender {
 //        TaskPool.getInstance().execute(new DownLoadTask(info,context,listener,tag));
 //    }
 
-    private void addHeaders(HttpRequest.Builder builder, LinkedHashMap<String, String> headers) {
+    private void addHeaders(HttpRequest.Builder builder, Map<String, String> headers) {
         if (headers != null && headers.size() > 0) {
             builder.setHeader(headers);
         }
