@@ -237,6 +237,7 @@ public class SwipeCardsView extends LinearLayout {
                 resetViewGroup();
                 if (isTouchTopView(ev) && canMoveCard() && mEnableSwipe) {
                     isTouching = true;
+                    getParent().requestDisallowInterceptTouchEvent(true);
                 }
                 hasTouchTopView = false;
                 mLastY = (int) ev.getRawY();
@@ -270,6 +271,8 @@ public class SwipeCardsView extends LinearLayout {
                     moveTopView(deltaX, deltaY);
                     invalidate();
                     sendCancelEvent();
+                    // tell parent,not intercept this view TouchEvent
+                    getParent().requestDisallowInterceptTouchEvent(true);
                     return true;
                 }
                 break;
@@ -287,6 +290,8 @@ public class SwipeCardsView extends LinearLayout {
 
                 releaseTopView(xvel, yvel);
                 releaseVelocityTracker();
+                // release touEvent
+                getParent().requestDisallowInterceptTouchEvent(false);
 //                invalidate();
                 break;
         }
