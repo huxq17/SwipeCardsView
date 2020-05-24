@@ -1,27 +1,36 @@
 apply plugin: 'com.android.application'
+apply from: "${project.rootProject.file('gradle/kotlin.gradle')}"
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
-
+    compileSdkVersion appCompileSdkVersion
     defaultConfig {
-        applicationId "com.huxq17.example"
-        minSdkVersion 11
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        applicationId "com.huxq17.download.demo"
+        minSdkVersion appMinSdkVersion
+        targetSdkVersion appTargetSdkVersion
+        versionCode appVersionCode
+        versionName appVersionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
+//        signingConfigs {
+//            myConfig {
+//                storeFile file('C:/Users/keystore.jks')
+//                storePassword "tlu2144"
+//                keyAlias "key0"
+//                keyPassword "tlu2144"
+//            }
+//        }
     }
     buildTypes {
-        debug {
-            buildConfigField "boolean", "isFake", "false"
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
         release {
-            buildConfigField "boolean", "isFake", "false"
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.myConfig
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+//        debug {
+//            minifyEnabled false
+//            testCoverageEnabled true
+//        }
+
     }
     lintOptions {
         abortOnError false
@@ -29,18 +38,21 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
 
-    //    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:design:23.0.1'
-    compile 'com.huxq17.android:tractor:1.0.5'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support:cardview-v7:23.0.1'
-    compile 'io.realm:realm-android:0.81.1'
-    compile 'org.jsoup:jsoup:1.8.2'
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.huxq17.android:SwipeCardsView:1.3.5'
-//    compile project(':library')
-    compile project(':okhttp')
+    implementation'com.huxq17.pump:download:1.3.2'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
+    //    implementation 'com.android.support:appcompat-v7:23.3.0'
+    implementation dep.androidMaterial
+    implementation 'com.huxq17.android:tractor:1.0.5'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'io.realm:realm-android:0.81.1'
+    implementation 'org.jsoup:jsoup:1.8.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.huxq17.android:SwipeCardsView:1.3.5'
+//    implementation project(':library')
+//    implementation project(':okhttp')
 }

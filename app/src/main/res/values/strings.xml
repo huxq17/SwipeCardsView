@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SwipeCardsView</string>
+    <string name="app_name">治愈神器</string>
     <string name="action_settings">Settings</string>
     <string name="action_left">向左边滑出</string>
     <string name="action_right">向右边滑出</string>

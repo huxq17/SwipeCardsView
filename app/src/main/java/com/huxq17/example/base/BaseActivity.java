@@ -20,7 +20,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -83,6 +83,7 @@ public class BaseActivity extends AppCompatActivity {
             }
         }
         return super.dispatchTouchEvent(ev);
+
     }
 
     @Override
@@ -133,7 +134,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public boolean isEmpty(String str) {
-        return mBase != null ? mBase.isEmpty(str) : true;
+        return mBase == null || mBase.isEmpty(str);
     }
 
     public void toast(String msg) {

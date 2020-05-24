@@ -47,18 +47,18 @@ public class OKHttp implements HttpBase {
     private NetWorkTask netWorkTask;
 
     static {
-        mOkHttpClient.setRetryOnConnectionFailure(true);
-        mOkHttpClient.setConnectTimeout(15, TimeUnit.SECONDS);
-        mOkHttpClient.setReadTimeout(15, TimeUnit.SECONDS);
-        mOkHttpClient.setWriteTimeout(15, TimeUnit.SECONDS);
-//        mOkHttpClient.networkInterceptors().add(new RedirectInterceptor());
-        int versionCode = Build.VERSION.SDK_INT;
-        if (versionCode >= 9) {
-            mOkHttpClient.setCookieHandler(new CookieManager(null,
-                    CookiePolicy.ACCEPT_ORIGINAL_SERVER));
-//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitNetwork().build();
-//            StrictMode.setThreadPolicy(policy);
-        }
+//        mOkHttpClient.setRetryOnConnectionFailure(true);
+//        mOkHttpClient.setConnectTimeout(15, TimeUnit.SECONDS);
+//        mOkHttpClient.setReadTimeout(15, TimeUnit.SECONDS);
+//        mOkHttpClient.setWriteTimeout(15, TimeUnit.SECONDS);
+////        mOkHttpClient.networkInterceptors().add(new RedirectInterceptor());
+//        int versionCode = Build.VERSION.SDK_INT;
+//        if (versionCode >= 9) {
+//            mOkHttpClient.setCookieHandler(new CookieManager(null,
+//                    CookiePolicy.ACCEPT_ORIGINAL_SERVER));
+////            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitNetwork().build();
+////            StrictMode.setThreadPolicy(policy);
+//        }
     }
 
     public void prepareTask() {
@@ -207,7 +207,7 @@ public class OKHttp implements HttpBase {
     public void cancel(Object... tag) {
         if (tag != null && tag.length == 1) {
             for (int i = 0; i < tag.length; i++) {
-                mOkHttpClient.cancel(tag[i]);
+//                mOkHttpClient.cancel(tag[i]);
             }
         }
     }
@@ -302,51 +302,51 @@ public class OKHttp implements HttpBase {
             }
         }
 
-        private void enqueue() {
-            mCall.enqueue(new Callback() {
-                @Override
-                public void onFailure(Request request, IOException e) {
-                    synchronized (NetWorkTask.this) {
-                        NetWorkTask.this.notifyFail(e);
-                        NetWorkTask.this.notify();
-                    }
-                }
-
-                @Override
-                public void onResponse(Response response) throws IOException {
-                    synchronized (NetWorkTask.this) {
-                        HttpResponse httpResponse = new HttpResponse();
-                        String string = null;
-                        switch (mType) {
-                            case String:
-                                try {
-                                    string = response.body().string();
-                                } catch (IOException e) {
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                httpResponse.setString(string);
-                                LogUtils.d("okresult: " + string);
-                                break;
-                            case InputStream:
-                                httpResponse.setInputStream(response.body().byteStream());
-                                break;
-                        }
-                        httpResponse.setString(string);
-                        httpResponse.setContentLength(response.body().contentLength());
-                        NetWorkTask.this.notifySuccess(httpResponse);
-                        NetWorkTask.this.notify();
-                    }
-                }
-            });
-            synchronized (this) {
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+//        private void enqueue() {
+//            mCall.enqueue(new Callback() {
+//                @Override
+//                public void onFailure(Request request, IOException e) {
+//                    synchronized (NetWorkTask.this) {
+//                        NetWorkTask.this.notifyFail(e);
+//                        NetWorkTask.this.notify();
+//                    }
+//                }
+//
+//                @Override
+//                public void onResponse(Response response) throws IOException {
+//                    synchronized (NetWorkTask.this) {
+//                        HttpResponse httpResponse = new HttpResponse();
+//                        String string = null;
+//                        switch (mType) {
+//                            case String:
+//                                try {
+//                                    string = response.body().string();
+//                                } catch (IOException e) {
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//                                httpResponse.setString(string);
+//                                LogUtils.d("okresult: " + string);
+//                                break;
+//                            case InputStream:
+//                                httpResponse.setInputStream(response.body().byteStream());
+//                                break;
+//                        }
+//                        httpResponse.setString(string);
+//                        httpResponse.setContentLength(response.body().contentLength());
+//                        NetWorkTask.this.notifySuccess(httpResponse);
+//                        NetWorkTask.this.notify();
+//                    }
+//                }
+//            });
+//            synchronized (this) {
+//                try {
+//                    this.wait();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
 
         @Override
         public void cancelTask() {

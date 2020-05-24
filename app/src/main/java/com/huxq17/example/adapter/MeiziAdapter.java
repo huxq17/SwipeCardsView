@@ -47,9 +47,9 @@ public class MeiziAdapter extends BaseCardAdapter {
         }
         ImageView imageView = (ImageView) cardview.findViewById(R.id.iv_meizi);
         ContentBean meizi = datas.get(position);
-        String url = BuildConfig.isFake ? "file:///android_asset/fake/laoer.png" : meizi.getUrl();
-        Bitmap.Config config = BuildConfig.isFake ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
-        Picasso.with(context).load(url).config(config).into(imageView);
+        String url =meizi.getUrl();
+        Bitmap.Config config = Bitmap.Config.RGB_565;
+        Picasso.get().load(url).config(config).into(imageView);
     }
 
     /**

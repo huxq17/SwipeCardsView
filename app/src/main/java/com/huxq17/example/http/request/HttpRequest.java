@@ -13,7 +13,7 @@ public class HttpRequest {
     private HttpMethod method;
     private RequestParams requestParams;
     private String url;
-    private boolean synchron = false;
+    private boolean synchron;
     private ResponseType responseType;
 
 

@@ -95,7 +95,7 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
                 String html = httpResponse.string();
                 if (html != null) {
                     List<ContentBean> beans = parserMainBean(this, html, "", tag);
-                    if (beans != null && beans.size() > 0) {
+                    if (beans.size() > 0) {
                         notifySuccess(beans);
                     } else {
                         notifyFail("数据解析异常");
@@ -125,7 +125,7 @@ public abstract class BasePresenter<T extends BaseBean, F extends UltraPagerFrag
             MeiziBean bean = new MeiziBean();
             bean.setOrder(i);
 
-            bean.setTitle(imgelement.attr("alt").toString());
+            bean.setTitle(imgelement.attr("alt"));
             bean.setType(type);
             bean.setHeight(354);//element.attr("height")
             bean.setWidth(236);

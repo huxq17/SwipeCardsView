@@ -1,7 +1,9 @@
 package com.huxq17.example.base;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.util.TypedValue;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by huxq17 on 2016/4/11.
@@ -33,6 +35,17 @@ public class BaseFragment extends Fragment {
         if (mBase != null) {
             mBase.setText(obj, str);
         }
+    }
+
+    protected int dp2px(int dp){
+        return  (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,dp,
+                getResources().getDisplayMetrics());
+    }
+    protected int sp2px(int sp){
+        return  (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP,sp,
+                getResources().getDisplayMetrics());
     }
 
     /**
