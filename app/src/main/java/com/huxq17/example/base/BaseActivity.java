@@ -20,7 +20,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -82,8 +84,12 @@ public class BaseActivity extends AppCompatActivity {
                 mBase.HideSoftInput(view.getWindowToken());
             }
         }
-        return super.dispatchTouchEvent(ev);
-
+        try {
+            return super.dispatchTouchEvent(ev);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

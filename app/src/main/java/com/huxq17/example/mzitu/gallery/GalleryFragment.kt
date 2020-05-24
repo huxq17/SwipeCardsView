@@ -9,6 +9,7 @@ import com.andbase.tractor.task.Task
 import com.andbase.tractor.task.TaskPool
 import com.huxq17.download.Pump
 import com.huxq17.download.core.DownloadListener
+import com.huxq17.download.utils.LogUtil
 import com.huxq17.example.R
 import com.huxq17.example.base.BaseFragment
 import com.huxq17.example.http.HttpSender
@@ -62,14 +63,20 @@ class GalleryFragment : BaseFragment() {
                 val html = httpResponse.string()
                 if (html != null) {
                     val doc = Jsoup.parse(html)
-                    doc.select("div.main-image").let {
+                    doc.select("div.main-image")?.let {
                         val imageElement = it.select("img")
                         widthRatio = imageElement.attr("width").toIntOrNull()?:0
                         heightRatio = imageElement.attr("height").toIntOrNull()?:0
-                        notifySuccess(imageElement.attr("src"))
+                        val src = imageElement.attr("src")
+                        if(src.isNotBlank()){
+                            notifySuccess(src)
+                        }else{
+                            notifyFail("获取图片失败")
+                        }
+
+                    }?:run{
+                        notifyFail("网络异常");
                     }
-
-
                 } else {
                     notifyFail("网络异常");
                 }
@@ -98,8 +105,7 @@ class GalleryFragment : BaseFragment() {
                         Picasso.get().load(File(downloadInfo.filePath))
                                 .into(ivGallery)
                     }
-                })
-                .submit()
+                }).submit()
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {

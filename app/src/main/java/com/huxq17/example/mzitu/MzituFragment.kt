@@ -94,14 +94,12 @@ class MzituFragment : BaseFragment() {
                     val doc = Jsoup.parse(html)
                     val elements = doc.select("div.postlist")
                     val postList = arrayListOf<PostItem>()
-                    elements[0]?.childNode(1)?.childNodes()?.forEach {
-                        if (it is Element) {
+                    elements[0]?.childNode(1)?.childNodes()?.filterIsInstance<Element>()?. forEach {
                             val time = it.select("span.time").text()
                             val image = it.select("img").attr("data-original")
                             val title = it.select("a")[1].text()
                             val url = it.select("a")[1].attr("href")
                             postList.add(PostItem(image, url, title, time))
-                        }
                     }
                     notifySuccess(postList)
                 } else {

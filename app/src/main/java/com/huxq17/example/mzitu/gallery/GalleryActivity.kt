@@ -54,6 +54,7 @@ class GalleryActivity : BaseActivity() {
                 super.onSuccess(result)
                 adapter = GalleryAdapter(supportFragmentManager, result as List<GalleryBean>)
                 viewPager.adapter = adapter
+                tvPageIndex.text = "1 / ${adapter?.count}"
             }
         }
         listener.setDismissTime(0)
