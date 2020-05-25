@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.huxq17.example.mzitu.view.GalleryImageView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/ivGallery"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="fitCenter"
         />
 </FrameLayout>

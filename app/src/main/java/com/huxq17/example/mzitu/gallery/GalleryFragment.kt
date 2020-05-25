@@ -1,5 +1,6 @@
 package com.huxq17.example.mzitu.gallery
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.huxq17.example.base.BaseFragment
 import com.huxq17.example.http.HttpSender
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_gallery.*
+import kotlinx.android.synthetic.main.fragment_gallery.view.*
 import okhttp3.Request
 import org.jsoup.Jsoup
 import java.io.File
@@ -31,8 +33,6 @@ class GalleryFragment : BaseFragment() {
     private val galleryBean by lazy {
         arguments!!.getParcelable<GalleryBean>("galleryBean")!!
     }
-    private var widthRatio = 0
-    private var heightRatio = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_gallery, container, false)
     }
@@ -41,11 +41,12 @@ class GalleryFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         galleryBean.image?.let {
-            widthRatio = galleryBean.widthRatio
-            heightRatio = galleryBean.heightRatio
             downloadImage(it)
         } ?: run {
             loadData()
+        }
+        ivGallery.setOnClickListener {
+            (activity as? GalleryActivity)?.next()
         }
     }
 
@@ -65,8 +66,6 @@ class GalleryFragment : BaseFragment() {
                     val doc = Jsoup.parse(html)
                     doc.select("div.main-image")?.let {
                         val imageElement = it.select("img")
-                        widthRatio = imageElement.attr("width").toIntOrNull()?:0
-                        heightRatio = imageElement.attr("height").toIntOrNull()?:0
                         val src = imageElement.attr("src")
                         if(src.isNotBlank()){
                             notifySuccess(src)
@@ -101,9 +100,9 @@ class GalleryFragment : BaseFragment() {
                 .listener(object : DownloadListener(this) {
                     override fun onSuccess() {
                         super.onSuccess()
-                        ivGallery.setRatio(widthRatio, heightRatio)
                         Picasso.get().load(File(downloadInfo.filePath))
-                                .into(ivGallery)
+                                .config(Bitmap.Config.ARGB_8888)
+                                .into(view.ivGallery)
                     }
                 }).submit()
     }

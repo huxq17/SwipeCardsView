@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <com.huxq17.example.mzitu.view.CoverImageView
-        android:id="@+id/ivMeiziCover"
+    <ImageView
+        android:id="@+id/ivZhuanTiCover"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

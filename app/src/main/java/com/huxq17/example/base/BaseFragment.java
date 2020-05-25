@@ -2,7 +2,10 @@ package com.huxq17.example.base;
 
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -10,6 +13,7 @@ import androidx.fragment.app.Fragment;
  */
 public class BaseFragment extends Fragment {
     private Base mBase;
+    protected View view;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,12 @@ public class BaseFragment extends Fragment {
         if (mBase != null) {
             mBase.setText(obj, str);
         }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.view = view;
     }
 
     protected int dp2px(int dp){

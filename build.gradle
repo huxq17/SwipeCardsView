@@ -17,7 +17,11 @@ allprojects {
     repositories {
         jcenter()
         google()
+        maven {
+            url '../../../repo'
+        }
         maven { url "https://jitpack.io" }
+
     }
     tasks.withType(Javadoc) {
         options.encoding = "UTF-8"

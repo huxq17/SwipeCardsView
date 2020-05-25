@@ -60,6 +60,18 @@ public class BaseActivity extends AppCompatActivity {
         return actionBarSize;
     }
 
+    protected int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dp,
+                getResources().getDisplayMetrics());
+    }
+
+    protected int sp2px(int sp) {
+        return (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_SP, sp,
+                getResources().getDisplayMetrics());
+    }
+
     protected int getScreenHeight() {
         return findViewById(android.R.id.content).getHeight();
     }

@@ -13,6 +13,7 @@ import com.andbase.tractor.task.TaskPool
 import com.huxq17.example.R
 import com.huxq17.example.base.BaseActivity
 import com.huxq17.example.http.HttpSender
+import com.huxq17.example.mzitu.PageStore
 import com.huxq17.example.mzitu.bean.PostItem
 import kotlinx.android.synthetic.main.activity_gallery.*
 import org.jsoup.Jsoup
@@ -48,6 +49,19 @@ class GalleryActivity : BaseActivity() {
         loadData()
     }
 
+    fun next() {
+        if(viewPager.currentItem+1>=adapter?.count?:0){
+            finish()
+            return
+        }
+        viewPager.currentItem++
+    }
+
+    override fun onPause() {
+        super.onPause()
+        PageStore.storePage(item?.url, viewPager.currentItem)
+    }
+
     private fun loadData() {
         val listener: LoadListenerImpl = object : LoadListenerImpl() {
             override fun onSuccess(result: Any) {
@@ -55,6 +69,7 @@ class GalleryActivity : BaseActivity() {
                 adapter = GalleryAdapter(supportFragmentManager, result as List<GalleryBean>)
                 viewPager.adapter = adapter
                 tvPageIndex.text = "1 / ${adapter?.count}"
+               viewPager.currentItem =  PageStore.restorePage(item?.url!!)
             }
         }
         listener.setDismissTime(0)

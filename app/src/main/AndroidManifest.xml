@@ -23,6 +23,7 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".mzitu.gallery.GalleryActivity" />
+        <activity android:name=".mzitu.ZhuanTiActivity" />
     </application>
 
 </manifest>

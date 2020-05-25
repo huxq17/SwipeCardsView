@@ -15,7 +15,7 @@ class MzituActivity : BaseActivity() {
             TabBean("最新", "https://www.mzitu.com/"),
             TabBean("最热", "https://www.mzitu.com/hot/"),
             TabBean("推荐", "https://www.mzitu.com/best"),
-            TabBean("专题", "https://www.mzitu.com/zhuanti/")
+            TabBean("专题", "https://www.mzitu.com/zhuanti/",true)
     )
     private val adapter by lazy {
         TabAdapter(supportFragmentManager, tabList)

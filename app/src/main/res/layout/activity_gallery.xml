@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
+    android:background="#000"
     android:orientation="vertical">
 
     <androidx.viewpager.widget.ViewPager
@@ -18,6 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:gravity="center"
+        android:textColor="#Fff"
+        android:layout_marginBottom="5dp"
         tools:text="4/10" />
 </FrameLayout>
 
