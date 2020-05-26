@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.andbase.tractor.listener.impl.LoadListenerImpl
@@ -22,9 +23,6 @@ import com.huxq17.example.mzitu.gallery.GalleryActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_mzitu.*
 import kotlinx.android.synthetic.main.layout_post_item.view.*
-import kotlinx.android.synthetic.main.layout_post_item.view.tvTime
-import kotlinx.android.synthetic.main.layout_post_item.view.tvTitle
-import kotlinx.android.synthetic.main.layout_zhuanti_item.view.*
 import okhttp3.Request
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -43,7 +41,7 @@ class MzituFragment : BaseFragment() {
 
     private var tabData: TabBean? = null
     private var adapter: MzituAdapter? = null
-    private val map: HashMap<String, RecyclerView.ViewHolder> = HashMap()
+    private val map: HashMap<String, MeiziViewHolder> = HashMap()
     private var pageIndex: Int = 1
     private var totalPage: Int = 1
     private val downloadListener = object : DownloadListener(this) {
@@ -51,12 +49,7 @@ class MzituFragment : BaseFragment() {
         override fun onSuccess() {
             super.onSuccess()
             val downloadInfo = downloadInfo
-            if (isZhuanTi()) {
-                (map[downloadInfo.url] as? ZhuanTiViewHolder)?.bindImage(downloadInfo)
-            } else {
-                (map[downloadInfo.url] as? MeiziViewHolder)?.bindImage(downloadInfo)
-            }
-
+            map[downloadInfo.url]?.bindImage(downloadInfo)
         }
 
     }
@@ -98,6 +91,10 @@ class MzituFragment : BaseFragment() {
             override fun onLoading(result: Any?) {
                 super.onLoading(result)
                 totalPage = result as Int
+            }
+            override fun onFail(result: Any?) {
+                super.onFail(result)
+               toast(result as String)
             }
         }
         listener.setDismissTime(0)
@@ -165,7 +162,7 @@ class MzituFragment : BaseFragment() {
 
     private fun getUrl() = tabData?.href + if (pageIndex > 1) "page/$pageIndex" else ""
 
-    class MzituAdapter(private val fragment: MzituFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    class MzituAdapter(private val fragment: MzituFragment) : RecyclerView.Adapter<MeiziViewHolder>() {
         private var isLoading = false
         private val list = arrayListOf<PostItem>()
         fun setData(data: List<PostItem>) {
@@ -181,25 +178,19 @@ class MzituFragment : BaseFragment() {
             notifyItemRangeChanged(listSize, data.size)
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                if (fragment.isZhuanTi()) ZhuanTiViewHolder(parent) else MeiziViewHolder(parent)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MeiziViewHolder(parent, fragment.isZhuanTi())
 
         override fun getItemCount() = list.size
+        override fun onViewDetachedFromWindow(holder: MeiziViewHolder) {
+            super.onViewDetachedFromWindow(holder)
+            holder.stopLoadImage()
+            fragment.map.remove(holder.image)
+        }
 
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: MeiziViewHolder, position: Int) {
             val item = list[position]
-            Pump.newRequest(item.image)
-                    .disableBreakPointDownload()
-                    .setRequestBuilder(Request.Builder()
-                            .addHeader("accept", "image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5")
-                            .addHeader("accept-encoding", "gzip, deflate, br")
-                            .addHeader("accept-language", "zh-Hans-CN,zh-Hans;q=0.5")
-                            .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
-                                    " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363")
-                            .addHeader("referer", fragment.getUrl())
-                    )
-                    .forceReDownload(true)
-                    .submit()
+
+            holder.loadImage(item.image, fragment.getUrl())
             fragment.map[item.image] = holder
             holder.itemView.tvTitle.text = item.title
             holder.itemView.tvTime.text = item.time
@@ -217,26 +208,38 @@ class MzituFragment : BaseFragment() {
         }
     }
 
-    class MeiziViewHolder(parent: ViewGroup) :
+    class MeiziViewHolder(parent: ViewGroup, private val isZhuanTi: Boolean) :
             RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_post_item, parent, false)) {
+         var image: String = ""
+        init {
+            itemView.ivMeiziCover.let {
+                it.widthRatio = if (!isZhuanTi) 256 else 1
+                it.heightRatio = if (!isZhuanTi) 354 else 1
+            }
+        }
+        fun stopLoadImage(){
+            Pump.stop(image)
+        }
+        fun loadImage(image: String, referer: String) {
+            this.image = image
+            Pump.newRequest(image)
+                    .disableBreakPointDownload()
+                    .setRequestBuilder(Request.Builder()
+                            .addHeader("accept", "image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5")
+                            .addHeader("accept-encoding", "gzip, deflate, br")
+                            .addHeader("accept-language", "zh-Hans-CN,zh-Hans;q=0.5")
+                            .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
+                                    " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363")
+                            .addHeader("referer", referer)
+                    )
+                    .submit()
+        }
 
         fun bindImage(downloadInfo: DownloadInfo) {
+            if(downloadInfo.url != image)return
             Picasso.get().load(File(downloadInfo.filePath))
                     .fit()
                     .into(itemView.ivMeiziCover)
         }
     }
-
-    class ZhuanTiViewHolder(parent: ViewGroup) :
-            RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_post_item, parent, false)) {
-
-        fun bindImage(downloadInfo: DownloadInfo) {
-            Picasso.get().load(File(downloadInfo.filePath))
-                    .into(itemView.ivMeiziCover.also {
-                        it.widthRatio = 1
-                        it.heightRatio = 1
-                    })
-        }
-    }
-
 }

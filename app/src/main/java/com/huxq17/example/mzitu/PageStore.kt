@@ -8,6 +8,11 @@ object PageStore {
             map[it] = page
         }
     }
+    fun clearPage(url:String?){
+        url?.let {
+            map.remove(it)
+        }
+    }
 
     fun restorePage(url: String): Int = map[url] ?: 0
 }

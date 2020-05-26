@@ -8,6 +8,7 @@ import com.squareup.picasso.Picasso
 class App : Application() {
     private val picasso: Picasso by lazy {
         Picasso.Builder(applicationContext)
+                .loggingEnabled(false)
                 .defaultBitmapConfig(Bitmap.Config.RGB_565)
                 .build()
     }

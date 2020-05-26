@@ -17,12 +17,14 @@ class ZhuanTiActivity : BaseActivity() {
         }
     }
 
+    private val fragmentTag = ZhuanTiActivity::class.java.simpleName
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_zhuanlan)
-        val fragment = MzituFragment.create(TabBean("", intent.getStringExtra("url")?:""))
+        val fragment = supportFragmentManager.findFragmentByTag(fragmentTag)
+                ?: MzituFragment.create(TabBean("", intent.getStringExtra("url") ?: ""))
         supportFragmentManager.beginTransaction()
-                .add(R.id.flContainer,fragment)
+                .add(R.id.flContainer, fragment, fragmentTag)
                 .show(fragment)
                 .commit()
     }

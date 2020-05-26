@@ -43,6 +43,7 @@ class GalleryActivity : BaseActivity() {
 
             override fun onPageSelected(position: Int) {
                 tvPageIndex.text = "${position + 1} / ${adapter?.count}"
+                PageStore.storePage(item?.url,position)
             }
 
         })
@@ -50,16 +51,12 @@ class GalleryActivity : BaseActivity() {
     }
 
     fun next() {
-        if(viewPager.currentItem+1>=adapter?.count?:0){
+        if (viewPager.currentItem + 1 >= adapter?.count ?: 0) {
+            PageStore.clearPage(item?.url)
             finish()
             return
         }
         viewPager.currentItem++
-    }
-
-    override fun onPause() {
-        super.onPause()
-        PageStore.storePage(item?.url, viewPager.currentItem)
     }
 
     private fun loadData() {
@@ -69,7 +66,12 @@ class GalleryActivity : BaseActivity() {
                 adapter = GalleryAdapter(supportFragmentManager, result as List<GalleryBean>)
                 viewPager.adapter = adapter
                 tvPageIndex.text = "1 / ${adapter?.count}"
-               viewPager.currentItem =  PageStore.restorePage(item?.url!!)
+                viewPager.currentItem = PageStore.restorePage(item?.url!!)
+            }
+
+            override fun onFail(result: Any?) {
+                super.onFail(result)
+                toast(result as String)
             }
         }
         listener.setDismissTime(0)

@@ -10,7 +10,6 @@ import com.andbase.tractor.task.Task
 import com.andbase.tractor.task.TaskPool
 import com.huxq17.download.Pump
 import com.huxq17.download.core.DownloadListener
-import com.huxq17.download.utils.LogUtil
 import com.huxq17.example.R
 import com.huxq17.example.base.BaseFragment
 import com.huxq17.example.http.HttpSender
@@ -55,6 +54,11 @@ class GalleryFragment : BaseFragment() {
             override fun onSuccess(result: Any) {
                 super.onSuccess(result)
                 downloadImage(result as String)
+            }
+
+            override fun onFail(result: Any?) {
+                super.onFail(result)
+                toast(result as String)
             }
         }
         listener.setDismissTime(0)
