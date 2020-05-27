@@ -3,6 +3,7 @@ package com.huxq17.example.base;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

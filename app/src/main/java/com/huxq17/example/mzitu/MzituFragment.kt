@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.andbase.tractor.listener.impl.LoadListenerImpl
@@ -20,6 +19,7 @@ import com.huxq17.example.http.HttpSender
 import com.huxq17.example.mzitu.bean.PostItem
 import com.huxq17.example.mzitu.decoration.GridSpacingItemDecoration
 import com.huxq17.example.mzitu.gallery.GalleryActivity
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_mzitu.*
 import kotlinx.android.synthetic.main.layout_post_item.view.*
@@ -28,6 +28,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import java.io.File
+import java.net.URLEncoder
 
 
 class MzituFragment : BaseFragment() {
@@ -76,7 +77,15 @@ class MzituFragment : BaseFragment() {
         loadData()
     }
 
+    fun search(tabBean: TabBean) {
+        this.tabData = tabBean
+        pageIndex = 1
+        adapter?.clear()
+        loadData()
+    }
+
     private fun loadData(isLoadMore: Boolean = false) {
+        if (tabData == null) return
         val listener: LoadListenerImpl = object : LoadListenerImpl() {
             override fun onSuccess(result: Any) {
                 super.onSuccess(result)
@@ -92,9 +101,10 @@ class MzituFragment : BaseFragment() {
                 super.onLoading(result)
                 totalPage = result as Int
             }
+
             override fun onFail(result: Any?) {
                 super.onFail(result)
-               toast(result as String)
+                toast(result as String)
             }
         }
         listener.setDismissTime(0)
@@ -135,9 +145,13 @@ class MzituFragment : BaseFragment() {
         elements[0]?.childNode(1)?.childNodes()?.filterIsInstance<Element>()?.forEach {
             val time = it.select("span.time").text() ?: ""
             val image = it.select("img").attr("data-original") ?: ""
-            val title = it.select("a")[1].text() ?: ""
-            val url = it.select("a")[1].attr("href") ?: ""
-            postList.add(PostItem(image, url, title, time))
+            it.select("a")?.let { a ->
+                if (a.size > 0) {
+                    val title = a[1].text() ?: ""
+                    val url = a[1].attr("href") ?: ""
+                    postList.add(PostItem(image, url, title, time))
+                }
+            }
         }
         return postList
     }
@@ -178,6 +192,11 @@ class MzituFragment : BaseFragment() {
             notifyItemRangeChanged(listSize, data.size)
         }
 
+        fun clear() {
+            list.clear()
+            notifyDataSetChanged()
+        }
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MeiziViewHolder(parent, fragment.isZhuanTi())
 
         override fun getItemCount() = list.size
@@ -210,16 +229,19 @@ class MzituFragment : BaseFragment() {
 
     class MeiziViewHolder(parent: ViewGroup, private val isZhuanTi: Boolean) :
             RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_post_item, parent, false)) {
-         var image: String = ""
+        var image: String = ""
+
         init {
             itemView.ivMeiziCover.let {
                 it.widthRatio = if (!isZhuanTi) 256 else 1
                 it.heightRatio = if (!isZhuanTi) 354 else 1
             }
         }
-        fun stopLoadImage(){
+
+        fun stopLoadImage() {
             Pump.stop(image)
         }
+
         fun loadImage(image: String, referer: String) {
             this.image = image
             Pump.newRequest(image)
@@ -230,15 +252,16 @@ class MzituFragment : BaseFragment() {
                             .addHeader("accept-language", "zh-Hans-CN,zh-Hans;q=0.5")
                             .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
                                     " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363")
-                            .addHeader("referer", referer)
+                            .addHeader("referer", URLEncoder.encode(referer, "utf-8"))
                     )
                     .submit()
         }
 
         fun bindImage(downloadInfo: DownloadInfo) {
-            if(downloadInfo.url != image)return
+            if (downloadInfo.url != image) return
             Picasso.get().load(File(downloadInfo.filePath))
                     .fit()
+                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(itemView.ivMeiziCover)
         }
     }

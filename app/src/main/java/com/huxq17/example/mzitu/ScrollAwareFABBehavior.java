@@ -14,10 +14,6 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-/**
- * Created by 070 on 2017/6/29.
- */
-
 public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
 
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();

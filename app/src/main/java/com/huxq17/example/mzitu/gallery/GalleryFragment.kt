@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_gallery.view.*
 import okhttp3.Request
 import org.jsoup.Jsoup
 import java.io.File
+import java.net.URLEncoder
 
 class GalleryFragment : BaseFragment() {
     companion object {
@@ -76,7 +77,6 @@ class GalleryFragment : BaseFragment() {
                         }else{
                             notifyFail("获取图片失败")
                         }
-
                     }?:run{
                         notifyFail("网络异常");
                     }
@@ -99,7 +99,8 @@ class GalleryFragment : BaseFragment() {
                         .addHeader("accept-language", "zh-Hans-CN,zh-Hans;q=0.5")
                         .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
                                 " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363")
-                        .addHeader("referer", galleryBean.url))
+                        .addHeader("referer", URLEncoder.encode(galleryBean.url,"utf-8"))
+                )
                 .disableBreakPointDownload()
                 .listener(object : DownloadListener(this) {
                     override fun onSuccess() {
@@ -107,6 +108,11 @@ class GalleryFragment : BaseFragment() {
                         Picasso.get().load(File(downloadInfo.filePath))
                                 .config(Bitmap.Config.ARGB_8888)
                                 .into(view.ivGallery)
+                    }
+
+                    override fun onFailed() {
+                        super.onFailed()
+                        toast("downloadFailed ")
                     }
                 }).submit()
     }
