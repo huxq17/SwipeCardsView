@@ -23,6 +23,7 @@ import com.huxq17.example.bean.TabBean
 import com.huxq17.example.http.HttpSender
 import com.huxq17.example.mzitu.utils.AppUtils
 import kotlinx.android.synthetic.main.activity_mzitu.*
+import okhttp3.Request
 import org.jsoup.Jsoup
 import java.io.File
 
@@ -63,11 +64,12 @@ class MzituActivity : BaseActivity() {
                         .setPositiveButton("下载", DialogInterface.OnClickListener { _, _ ->
                             downloadApk(result as String)
                         })
+                        .show()
 
             }
         }
         listener.setDismissTime(0)
-        TaskPool.getInstance().execute(object : Task() {
+        TaskPool.getInstance().execute(object : Task("downloadAPk",listener) {
             override fun onRun() {
                 val httpResponse = HttpSender.instance().getSync("https://github.com/huxq17/SwipeCardsView/tree/dev/apk", null, null)
                 val html = httpResponse.string()
@@ -81,7 +83,7 @@ class MzituActivity : BaseActivity() {
                                         ?: 0
                                 if (apkVersionCode > AppUtils.getVersionCode(this@MzituActivity)) {
 
-                                    notifySuccess("https://raw.githubusercontent.com/huxq17/SwipeCardsView/master/apk/$it")
+                                    notifySuccess("https://raw.githubusercontent.com/huxq17/SwipeCardsView/dev/apk/$it")
                                 }
                             }
 
@@ -109,6 +111,14 @@ class MzituActivity : BaseActivity() {
                 .tag("apk")
                 //apk下载任务运行在独立的线程池中，不受其他下载任务干扰
                 .setDownloadTaskExecutor(apkDownloadExecutor)
+                .disableBreakPointDownload()
+                .setRequestBuilder(Request.Builder()
+                        .addHeader("accept", "image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5")
+                        .addHeader("accept-encoding", "gzip, deflate, br")
+                        .addHeader("accept-language", "zh-Hans-CN,zh-Hans;q=0.5")
+                        .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
+                                " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363")
+                )
                 .listener(object : DownloadListener(this) {
                     override fun onSuccess() {
                         super.onSuccess()
@@ -127,8 +137,8 @@ class MzituActivity : BaseActivity() {
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
         } else {
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive")
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(intent)
     }
 

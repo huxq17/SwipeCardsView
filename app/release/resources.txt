@@ -1339,6 +1339,7 @@ Referenced Strings:
   doc
   domain
   double
+  downloadAPk
   downloadInfo
   downloadInfo.filePath
   download_cache

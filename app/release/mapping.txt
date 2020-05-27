@@ -1,7 +1,7 @@
 # compiler: R8
 # compiler_version: 1.5.68
 # min_api: 17
-# pg_map_id: eb8d020
+# pg_map_id: a587e1b
 androidx.activity.Cancellable -> a.a.a:
 androidx.activity.ComponentActivity -> androidx.activity.ComponentActivity:
     androidx.activity.OnBackPressedDispatcher mOnBackPressedDispatcher -> f
@@ -21416,7 +21416,6 @@ com.huxq17.download.core.DownloadRequest$DownloadGenerator -> b.e.a.e.i$a:
     okhttp3.Request$Builder httpRequestBuilder -> l
     com.huxq17.download.core.DownloadRequest$DownloadGenerator disableBreakPointDownload() -> a
     com.huxq17.download.core.DownloadRequest$DownloadGenerator listener(com.huxq17.download.core.DownloadListener) -> a
-    com.huxq17.download.core.DownloadRequest$DownloadGenerator setRequestBuilder(okhttp3.Request$Builder) -> a
     1:1:void com.huxq17.download.core.DownloadListener.setId(java.lang.String):0:0 -> b
     1:1:void submit():0 -> b
     2:2:void com.huxq17.download.core.DownloadListener.enable():0:0 -> b
@@ -22637,6 +22636,14 @@ com.huxq17.example.mzitu.MzituActivity -> com.huxq17.example.mzitu.MzituActivity
     4:4:void access$downloadApk(com.huxq17.example.mzitu.MzituActivity,java.lang.String):0 -> a
     5:5:void downloadApk(java.lang.String):0:0 -> a
     5:5:void access$downloadApk(com.huxq17.example.mzitu.MzituActivity,java.lang.String):0 -> a
+    6:6:okhttp3.Request$Builder okhttp3.Request$Builder.addHeader(java.lang.String,java.lang.String):0:0 -> a
+    6:6:void downloadApk(java.lang.String):0 -> a
+    6:6:void access$downloadApk(com.huxq17.example.mzitu.MzituActivity,java.lang.String):0 -> a
+    7:7:com.huxq17.download.core.DownloadRequest$DownloadGenerator com.huxq17.download.core.DownloadRequest$DownloadGenerator.setRequestBuilder(okhttp3.Request$Builder):0:0 -> a
+    7:7:void downloadApk(java.lang.String):0 -> a
+    7:7:void access$downloadApk(com.huxq17.example.mzitu.MzituActivity,java.lang.String):0 -> a
+    8:8:void downloadApk(java.lang.String):0:0 -> a
+    8:8:void access$downloadApk(com.huxq17.example.mzitu.MzituActivity,java.lang.String):0 -> a
     android.view.View _$_findCachedViewById(int) -> b
     void access$installApk(com.huxq17.example.mzitu.MzituActivity,java.lang.String) -> b
     1:1:android.net.Uri androidx.core.content.FileProvider.getUriForFile(android.content.Context,java.lang.String,java.io.File):0:0 -> b
@@ -22691,20 +22698,17 @@ com.huxq17.example.mzitu.MzituActivity$upgrade$listener$1 -> b.e.b.g.c:
     1:1:void com.andbase.tractor.listener.impl.LoadListenerImpl.onSuccess(java.lang.Object):0:0 -> c
     1:1:void onSuccess(java.lang.Object):0 -> c
     2:2:void onSuccess(java.lang.Object):0:0 -> c
-    3:3:void androidx.appcompat.app.AlertDialog$Builder.<init>(android.content.Context):0:0 -> c
+    3:3:androidx.appcompat.app.AlertDialog$Builder androidx.appcompat.app.AlertDialog$Builder.setTitle(java.lang.CharSequence):0:0 -> c
     3:3:void onSuccess(java.lang.Object):0 -> c
-    4:4:void androidx.appcompat.app.AlertDialog$Builder.<init>(android.content.Context,int):0:0 -> c
-    4:4:void androidx.appcompat.app.AlertDialog$Builder.<init>(android.content.Context):0 -> c
+    4:4:androidx.appcompat.app.AlertDialog$Builder androidx.appcompat.app.AlertDialog$Builder.setMessage(java.lang.CharSequence):0:0 -> c
     4:4:void onSuccess(java.lang.Object):0 -> c
-    5:5:androidx.appcompat.app.AlertDialog$Builder androidx.appcompat.app.AlertDialog$Builder.setTitle(java.lang.CharSequence):0:0 -> c
-    5:5:void onSuccess(java.lang.Object):0 -> c
-    6:6:androidx.appcompat.app.AlertDialog$Builder androidx.appcompat.app.AlertDialog$Builder.setMessage(java.lang.CharSequence):0:0 -> c
+    5:5:void onSuccess(java.lang.Object):0:0 -> c
+    6:6:androidx.appcompat.app.AlertDialog$Builder androidx.appcompat.app.AlertDialog$Builder.setPositiveButton(java.lang.CharSequence,android.content.DialogInterface$OnClickListener):0:0 -> c
     6:6:void onSuccess(java.lang.Object):0 -> c
-    7:7:void onSuccess(java.lang.Object):0:0 -> c
-    8:8:androidx.appcompat.app.AlertDialog$Builder androidx.appcompat.app.AlertDialog$Builder.setPositiveButton(java.lang.CharSequence,android.content.DialogInterface$OnClickListener):0:0 -> c
+    7:7:androidx.appcompat.app.AlertDialog androidx.appcompat.app.AlertDialog$Builder.show():0:0 -> c
+    7:7:void onSuccess(java.lang.Object):0 -> c
+    8:8:void kotlin.jvm.internal.Intrinsics.checkParameterIsNotNull(java.lang.Object,java.lang.String):0:0 -> c
     8:8:void onSuccess(java.lang.Object):0 -> c
-    9:9:void kotlin.jvm.internal.Intrinsics.checkParameterIsNotNull(java.lang.Object,java.lang.String):0:0 -> c
-    9:9:void onSuccess(java.lang.Object):0 -> c
 com.huxq17.example.mzitu.MzituActivity$upgrade$listener$1$onSuccess$1 -> b.e.b.g.c$a:
     java.lang.Object $result -> c
     com.huxq17.example.mzitu.MzituActivity$upgrade$listener$1 this$0 -> b
@@ -22829,44 +22833,48 @@ com.huxq17.example.mzitu.MzituFragment$MzituAdapter -> com.huxq17.example.mzitu.
     5:5:void com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder.loadImage(java.lang.String,java.lang.String):0 -> b
     5:5:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
     5:5:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
-    6:6:void com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder.loadImage(java.lang.String,java.lang.String):0:0 -> b
+    6:6:com.huxq17.download.core.DownloadRequest$DownloadGenerator com.huxq17.download.core.DownloadRequest$DownloadGenerator.setRequestBuilder(okhttp3.Request$Builder):0:0 -> b
+    6:6:void com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder.loadImage(java.lang.String,java.lang.String):0 -> b
     6:6:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
     6:6:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
-    7:7:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0:0 -> b
+    7:7:void com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder.loadImage(java.lang.String,java.lang.String):0:0 -> b
+    7:7:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
     7:7:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
-    8:8:java.util.HashMap com.huxq17.example.mzitu.MzituFragment.access$getMap$p(com.huxq17.example.mzitu.MzituFragment):0:0 -> b
-    8:8:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
+    8:8:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0:0 -> b
     8:8:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
-    9:9:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0:0 -> b
+    9:9:java.util.HashMap com.huxq17.example.mzitu.MzituFragment.access$getMap$p(com.huxq17.example.mzitu.MzituFragment):0:0 -> b
+    9:9:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
     9:9:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
-    10:10:java.lang.String com.huxq17.example.mzitu.bean.PostItem.getTitle():0:0 -> b
-    10:10:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
+    10:10:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0:0 -> b
     10:10:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
-    11:11:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0:0 -> b
+    11:11:java.lang.String com.huxq17.example.mzitu.bean.PostItem.getTitle():0:0 -> b
+    11:11:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
     11:11:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
-    12:12:java.lang.String com.huxq17.example.mzitu.bean.PostItem.getTime():0:0 -> b
-    12:12:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
+    12:12:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0:0 -> b
     12:12:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
-    13:13:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0:0 -> b
+    13:13:java.lang.String com.huxq17.example.mzitu.bean.PostItem.getTime():0:0 -> b
+    13:13:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
     13:13:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
-    14:14:void com.huxq17.example.mzitu.MzituFragment.loadMore():0:0 -> b
-    14:14:void com.huxq17.example.mzitu.MzituFragment.access$loadMore(com.huxq17.example.mzitu.MzituFragment):0 -> b
-    14:14:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
+    14:14:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0:0 -> b
     14:14:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
-    15:15:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0:0 -> b
+    15:15:void com.huxq17.example.mzitu.MzituFragment.loadMore():0:0 -> b
+    15:15:void com.huxq17.example.mzitu.MzituFragment.access$loadMore(com.huxq17.example.mzitu.MzituFragment):0 -> b
+    15:15:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
     15:15:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
-    16:16:void kotlin.jvm.internal.Intrinsics.checkParameterIsNotNull(java.lang.Object,java.lang.String):0:0 -> b
-    16:16:void com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder.loadImage(java.lang.String,java.lang.String):0 -> b
-    16:16:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
+    16:16:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0:0 -> b
     16:16:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
     17:17:void kotlin.jvm.internal.Intrinsics.checkParameterIsNotNull(java.lang.Object,java.lang.String):0:0 -> b
+    17:17:void com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder.loadImage(java.lang.String,java.lang.String):0 -> b
     17:17:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
     17:17:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
-    18:18:com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder onCreateViewHolder(android.view.ViewGroup,int):0:0 -> b
-    18:18:androidx.recyclerview.widget.RecyclerView$ViewHolder onCreateViewHolder(android.view.ViewGroup,int):0 -> b
-    19:19:void kotlin.jvm.internal.Intrinsics.checkParameterIsNotNull(java.lang.Object,java.lang.String):0:0 -> b
-    19:19:com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder onCreateViewHolder(android.view.ViewGroup,int):0 -> b
+    18:18:void kotlin.jvm.internal.Intrinsics.checkParameterIsNotNull(java.lang.Object,java.lang.String):0:0 -> b
+    18:18:void onBindViewHolder(com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder,int):0 -> b
+    18:18:void onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder,int):0 -> b
+    19:19:com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder onCreateViewHolder(android.view.ViewGroup,int):0:0 -> b
     19:19:androidx.recyclerview.widget.RecyclerView$ViewHolder onCreateViewHolder(android.view.ViewGroup,int):0 -> b
+    20:20:void kotlin.jvm.internal.Intrinsics.checkParameterIsNotNull(java.lang.Object,java.lang.String):0:0 -> b
+    20:20:com.huxq17.example.mzitu.MzituFragment$MeiziViewHolder onCreateViewHolder(android.view.ViewGroup,int):0 -> b
+    20:20:androidx.recyclerview.widget.RecyclerView$ViewHolder onCreateViewHolder(android.view.ViewGroup,int):0 -> b
 com.huxq17.example.mzitu.MzituFragment$MzituAdapter$onBindViewHolder$1 -> b.e.b.g.d:
     com.huxq17.example.mzitu.bean.PostItem $item -> c
     com.huxq17.example.mzitu.MzituFragment$MzituAdapter this$0 -> b

@@ -24,8 +24,8 @@ android {
         release {
             debuggable false
             zipAlignEnabled true
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
 //            signingConfig signingConfigs.myConfig
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
