@@ -13,6 +13,7 @@ import com.huxq17.download.core.DownloadListener
 import com.huxq17.example.R
 import com.huxq17.example.base.BaseFragment
 import com.huxq17.example.http.HttpSender
+import com.huxq17.example.mzitu.App
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import kotlinx.android.synthetic.main.fragment_gallery.view.*
@@ -102,6 +103,7 @@ class GalleryFragment : BaseFragment() {
                         .addHeader("referer", URLEncoder.encode(galleryBean.url,"utf-8"))
                 )
                 .disableBreakPointDownload()
+                .setDownloadTaskExecutor(App.getInstance().imageDispatcher)
                 .listener(object : DownloadListener(this) {
                     override fun onSuccess() {
                         super.onSuccess()

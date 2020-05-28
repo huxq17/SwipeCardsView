@@ -33,5 +33,9 @@ class SearchActivity : BaseActivity() {
             }
             false
         }
+        etSearch.post {
+            etSearch.requestFocus()
+        }
+
     }
 }

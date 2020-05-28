@@ -19,7 +19,6 @@ import com.huxq17.example.http.HttpSender
 import com.huxq17.example.mzitu.bean.PostItem
 import com.huxq17.example.mzitu.decoration.GridSpacingItemDecoration
 import com.huxq17.example.mzitu.gallery.GalleryActivity
-import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_mzitu.*
 import kotlinx.android.synthetic.main.layout_post_item.view.*
@@ -246,6 +245,7 @@ class MzituFragment : BaseFragment() {
             this.image = image
             Pump.newRequest(image)
                     .disableBreakPointDownload()
+                    .setDownloadTaskExecutor(App.getInstance().imageDispatcher)
                     .setRequestBuilder(Request.Builder()
                             .addHeader("accept", "image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5")
                             .addHeader("accept-encoding", "gzip, deflate, br")
@@ -261,7 +261,7 @@ class MzituFragment : BaseFragment() {
             if (downloadInfo.url != image) return
             Picasso.get().load(File(downloadInfo.filePath))
                     .fit()
-                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+//                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(itemView.ivMeiziCover)
         }
     }

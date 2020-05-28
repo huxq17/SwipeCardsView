@@ -11,28 +11,29 @@ android {
         versionName appVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
-//        signingConfigs {
-//            myConfig {
-//                storeFile file('C:/Users/keystore.jks')
-//                storePassword "tlu2144"
-//                keyAlias "key0"
-//                keyPassword "tlu2144"
-//            }
-//        }
+        signingConfigs {
+            myConfig {
+                storeFile file('../mzitu.jks')
+                storePassword "tlu2144"
+                keyAlias "key0"
+                keyPassword "tlu2144"
+            }
+        }
     }
     buildTypes {
         release {
             debuggable false
             zipAlignEnabled true
-            minifyEnabled false
-            shrinkResources false
-//            signingConfig signingConfigs.myConfig
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.myConfig
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-//        debug {
-//            minifyEnabled false
-//            testCoverageEnabled true
-//        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.myConfig
+            testCoverageEnabled true
+        }
 
     }
     lintOptions {

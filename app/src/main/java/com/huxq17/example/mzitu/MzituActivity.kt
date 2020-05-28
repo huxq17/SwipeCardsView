@@ -1,6 +1,5 @@
 package com.huxq17.example.mzitu
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -61,9 +60,9 @@ class MzituActivity : BaseActivity() {
                 AlertDialog.Builder(this@MzituActivity)
                         .setTitle("更新提示")
                         .setMessage("1.优化用户体检\n2.解决若干bug")
-                        .setPositiveButton("下载", DialogInterface.OnClickListener { _, _ ->
+                        .setPositiveButton("下载") { _, _ ->
                             downloadApk(result as String)
-                        })
+                        }
                         .show()
 
             }
@@ -82,16 +81,15 @@ class MzituActivity : BaseActivity() {
                                 val apkVersionCode = it.substring(preIndex, lastDotIndex).toIntOrNull()
                                         ?: 0
                                 if (apkVersionCode > AppUtils.getVersionCode(this@MzituActivity)) {
-
                                     notifySuccess("https://raw.githubusercontent.com/huxq17/SwipeCardsView/dev/apk/$it")
                                 }
                             }
 
                         }
                     }
-
+                    notifyFail("")
                 } else {
-                    notifyFail("网络异常");
+                    notifyFail("网络异常")
                 }
             }
 
@@ -113,16 +111,20 @@ class MzituActivity : BaseActivity() {
                 .setDownloadTaskExecutor(apkDownloadExecutor)
                 .disableBreakPointDownload()
                 .setRequestBuilder(Request.Builder()
-                        .addHeader("accept", "image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5")
                         .addHeader("accept-encoding", "gzip, deflate, br")
                         .addHeader("accept-language", "zh-Hans-CN,zh-Hans;q=0.5")
-                        .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
-                                " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363")
+                        .addHeader("referer", "https://github.com/huxq17/SwipeCardsView/tree/dev/apk")
+                        .addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36")
                 )
                 .listener(object : DownloadListener(this) {
                     override fun onSuccess() {
                         super.onSuccess()
                         installApk(downloadInfo.filePath)
+                    }
+
+                    override fun onFailed() {
+                        super.onFailed()
+                        toast("下载失败")
                     }
                 })
                 .submit()
