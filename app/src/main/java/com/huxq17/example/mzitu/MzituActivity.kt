@@ -53,22 +53,32 @@ class MzituActivity : BaseActivity() {
         upgrade()
     }
 
+    private var isShowDialog = false
+    private  var upgradeDialog:AlertDialog ? = null
+    private fun showUpgradeDialog(apkUrl: String) {
+        if (isShowDialog) return
+        isShowDialog = true
+        upgradeDialog = AlertDialog.Builder(this@MzituActivity)
+                .setTitle("更新提示")
+                .setMessage("1.优化用户体检\n2.解决若干bug")
+                .setPositiveButton("下载") { _, _ ->
+                    downloadApk(apkUrl)
+                }
+                .setOnDismissListener {
+                    isShowDialog = false
+                }
+                .show()
+    }
+
     private fun upgrade() {
         val listener: LoadListenerImpl = object : LoadListenerImpl() {
             override fun onSuccess(result: Any) {
                 super.onSuccess(result)
-                AlertDialog.Builder(this@MzituActivity)
-                        .setTitle("更新提示")
-                        .setMessage("1.优化用户体检\n2.解决若干bug")
-                        .setPositiveButton("下载") { _, _ ->
-                            downloadApk(result as String)
-                        }
-                        .show()
-
+                showUpgradeDialog(result as String)
             }
         }
         listener.setDismissTime(0)
-        TaskPool.getInstance().execute(object : Task("downloadAPk",listener) {
+        TaskPool.getInstance().execute(object : Task("downloadAPk", listener) {
             override fun onRun() {
                 val httpResponse = HttpSender.instance().getSync("https://github.com/huxq17/SwipeCardsView/tree/dev/apk", null, null)
                 val html = httpResponse.string()
@@ -103,6 +113,11 @@ class MzituActivity : BaseActivity() {
         override fun getMaxDownloadNumber() = 1
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        upgradeDialog?.dismiss()
+    }
+
     private fun downloadApk(apkUrl: String) {
         toast("后台下载中...")
         Pump.newRequest(apkUrl)
@@ -111,10 +126,12 @@ class MzituActivity : BaseActivity() {
                 .setDownloadTaskExecutor(apkDownloadExecutor)
                 .disableBreakPointDownload()
                 .setRequestBuilder(Request.Builder()
-                        .addHeader("accept-encoding", "gzip, deflate, br")
-                        .addHeader("accept-language", "zh-Hans-CN,zh-Hans;q=0.5")
-                        .addHeader("referer", "https://github.com/huxq17/SwipeCardsView/tree/dev/apk")
-                        .addHeader("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36")
+                        .addHeader("Cache-Control", "max-age=0")
+                        .addHeader("Sec-Fetch-Dest", "document")
+                        .addHeader("Sec-Fetch-Mode", "navigate")
+                        .addHeader("Sec-Fetch-Site", "none")
+                        .addHeader("Sec-Fetch-User", "?1")
+                        .addHeader("host", "raw.githubusercontent.com")
                 )
                 .listener(object : DownloadListener(this) {
                     override fun onSuccess() {

@@ -95,11 +95,6 @@ class GalleryFragment : BaseFragment() {
     private fun downloadImage(imageUrl: String) {
         Pump.newRequest(imageUrl)
                 .setRequestBuilder(Request.Builder()
-                        .addHeader("accept", "image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5")
-                        .addHeader("accept-encoding", "gzip, deflate, br")
-                        .addHeader("accept-language", "zh-Hans-CN,zh-Hans;q=0.5")
-                        .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
-                                " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363")
                         .addHeader("referer", URLEncoder.encode(galleryBean.url,"utf-8"))
                 )
                 .disableBreakPointDownload()

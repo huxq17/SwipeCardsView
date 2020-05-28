@@ -12,6 +12,7 @@ import com.andbase.tractor.task.TaskPool
 import com.huxq17.download.Pump
 import com.huxq17.download.core.DownloadInfo
 import com.huxq17.download.core.DownloadListener
+import com.huxq17.download.utils.LogUtil
 import com.huxq17.example.R
 import com.huxq17.example.base.BaseFragment
 import com.huxq17.example.bean.TabBean
@@ -201,13 +202,12 @@ class MzituFragment : BaseFragment() {
         override fun getItemCount() = list.size
         override fun onViewDetachedFromWindow(holder: MeiziViewHolder) {
             super.onViewDetachedFromWindow(holder)
-            holder.stopLoadImage()
             fragment.map.remove(holder.image)
+            LogUtil.e("unbind item="+holder.image)
         }
-
         override fun onBindViewHolder(holder: MeiziViewHolder, position: Int) {
             val item = list[position]
-
+            LogUtil.e("bind item="+item.image)
             holder.loadImage(item.image, fragment.getUrl())
             fragment.map[item.image] = holder
             holder.itemView.tvTitle.text = item.title
@@ -237,21 +237,12 @@ class MzituFragment : BaseFragment() {
             }
         }
 
-        fun stopLoadImage() {
-            Pump.stop(image)
-        }
-
         fun loadImage(image: String, referer: String) {
             this.image = image
             Pump.newRequest(image)
                     .disableBreakPointDownload()
                     .setDownloadTaskExecutor(App.getInstance().imageDispatcher)
                     .setRequestBuilder(Request.Builder()
-                            .addHeader("accept", "image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5")
-                            .addHeader("accept-encoding", "gzip, deflate, br")
-                            .addHeader("accept-language", "zh-Hans-CN,zh-Hans;q=0.5")
-                            .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
-                                    " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363")
                             .addHeader("referer", URLEncoder.encode(referer, "utf-8"))
                     )
                     .submit()
