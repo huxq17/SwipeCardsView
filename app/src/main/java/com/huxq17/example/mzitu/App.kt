@@ -52,7 +52,7 @@ class App : Application() {
         Picasso.setSingletonInstance(picasso)
         CrashReport.initCrashReport(applicationContext, "5d27c16bd9", BuildConfig.DEBUG);
         DownloadConfig.newBuilder() //Optional,set the maximum number of tasks to run at the same time, default 3.
-                .setMaxRunningTaskNum(2) //Optional,set the minimum available storage space size for downloading to avoid insufficient storage space during downloading, default is 4kb.
+                .setMaxRunningTaskNum(6) //Optional,set the minimum available storage space size for downloading to avoid insufficient storage space during downloading, default is 4kb.
                 .setMinUsableStorageSpace(4 * 1024L)
                 .setDownloadConnectionFactory(AuthorizationHeaderConnection.Factory(Utils.getIgnoreCertificateOkHttpClient())) //Optional
                 .build()
