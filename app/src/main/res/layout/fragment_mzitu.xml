@@ -6,5 +6,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMzitu"
         android:layout_width="match_parent"
+        android:scrollbars="vertical"
         android:layout_height="match_parent" />
 </FrameLayout>
