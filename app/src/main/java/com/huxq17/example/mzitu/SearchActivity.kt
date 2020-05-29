@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView.OnEditorActionListener
 import com.huxq17.example.R
 import com.huxq17.example.base.BaseActivity
 import com.huxq17.example.bean.TabBean

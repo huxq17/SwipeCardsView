@@ -252,7 +252,6 @@ class MzituFragment : BaseFragment() {
             if (downloadInfo.url != image) return
             Picasso.get().load(File(downloadInfo.filePath))
                     .fit()
-//                    .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                     .into(itemView.ivMeiziCover)
         }
     }

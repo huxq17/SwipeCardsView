@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_search"
-                android:hint="搜一搜，看一看"
+                android:hint="搜一搜（输入美女试试）"
                 android:textColor="#000"
                 android:textSize="14sp"
                 android:textColorHint="#757575"
