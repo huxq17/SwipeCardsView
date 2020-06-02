@@ -240,7 +240,6 @@ class MzituFragment : BaseFragment() {
         fun loadImage(image: String, referer: String) {
             this.image = image
             Pump.newRequest(image)
-                    .disableBreakPointDownload()
                     .setDownloadTaskExecutor(App.getInstance().imageDispatcher)
                     .setRequestBuilder(Request.Builder()
                             .addHeader("referer", URLEncoder.encode(referer, "utf-8"))

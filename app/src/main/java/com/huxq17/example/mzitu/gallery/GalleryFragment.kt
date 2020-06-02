@@ -97,7 +97,6 @@ class GalleryFragment : BaseFragment() {
                 .setRequestBuilder(Request.Builder()
                         .addHeader("referer", URLEncoder.encode(galleryBean.url,"utf-8"))
                 )
-                .disableBreakPointDownload()
                 .setDownloadTaskExecutor(App.getInstance().imageDispatcher)
                 .listener(object : DownloadListener(this) {
                     override fun onSuccess() {
