@@ -19,7 +19,6 @@ import com.huxq17.download.core.SimpleDownloadTaskExecutor
 import com.huxq17.example.R
 import com.huxq17.example.base.BaseActivity
 import com.huxq17.example.bean.TabBean
-import com.huxq17.example.http.HttpSender
 import com.huxq17.example.mzitu.utils.AppUtils
 import kotlinx.android.synthetic.main.activity_mzitu.*
 import okhttp3.Request
@@ -54,7 +53,7 @@ class MzituActivity : BaseActivity() {
     }
 
     private var isShowDialog = false
-    private  var upgradeDialog:AlertDialog ? = null
+    private var upgradeDialog: AlertDialog? = null
     private fun showUpgradeDialog(apkUrl: String) {
         if (isShowDialog) return
         isShowDialog = true
@@ -80,27 +79,30 @@ class MzituActivity : BaseActivity() {
         listener.setDismissTime(0)
         TaskPool.getInstance().execute(object : Task("downloadAPk", listener) {
             override fun onRun() {
-                val httpResponse = HttpSender.instance().getSync("https://github.com/huxq17/SwipeCardsView/tree/dev/apk", null, null)
-                val html = httpResponse.string()
-                if (html != null) {
-                    Jsoup.parse(html).select("span.css-truncate")?.let { elements ->
-                        if (elements.size > 0) {
-                            elements[0].text()?.let {
-                                val preIndex = it.lastIndexOf("_") + 1
-                                val lastDotIndex = it.lastIndexOf(".")
-                                val apkVersionCode = it.substring(preIndex, lastDotIndex).toIntOrNull()
-                                        ?: 0
-                                if (apkVersionCode > AppUtils.getVersionCode(this@MzituActivity)) {
-                                    notifySuccess("https://raw.githubusercontent.com/huxq17/SwipeCardsView/dev/apk/$it")
+                Jsoup.connect("https://github.com/huxq17/SwipeCardsView/tree/dev/apk")
+                        .header("Accept-Encoding", "gzip, deflate")
+                        .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
+                        .maxBodySize(0)
+                        .validateTLSCertificates(false)
+                        .timeout(30000)
+                        .get()?.select("span.css-truncate")?.let { elements ->
+                            if (elements.size > 0) {
+                                elements[0].text()?.let {
+                                    val preIndex = it.lastIndexOf("_") + 1
+                                    val lastDotIndex = it.lastIndexOf(".")
+                                    val apkVersionCode = it.substring(preIndex, lastDotIndex).toIntOrNull()
+                                            ?: 0
+                                    if (apkVersionCode > AppUtils.getVersionCode(this@MzituActivity)) {
+                                        notifySuccess("https://raw.githubusercontent.com/huxq17/SwipeCardsView/dev/apk/$it")
+                                    }
                                 }
-                            }
 
-                        }
-                    }
-                    notifyFail("")
-                } else {
+                            }
+                            notifyFail("")
+                        } ?: run {
                     notifyFail("网络异常")
                 }
+
             }
 
             override fun cancelTask() {
@@ -124,7 +126,6 @@ class MzituActivity : BaseActivity() {
                 .tag("apk")
                 //apk下载任务运行在独立的线程池中，不受其他下载任务干扰
                 .setDownloadTaskExecutor(apkDownloadExecutor)
-                .disableBreakPointDownload()
                 .setRequestBuilder(Request.Builder()
                         .addHeader("Cache-Control", "max-age=0")
                         .addHeader("Sec-Fetch-Dest", "document")
@@ -132,6 +133,7 @@ class MzituActivity : BaseActivity() {
                         .addHeader("Sec-Fetch-Site", "none")
                         .addHeader("Sec-Fetch-User", "?1")
                         .addHeader("host", "raw.githubusercontent.com")
+                        .addHeader("referer", "https://github.com/huxq17/SwipeCardsView/blob/dev/apk/meizitu_release_2.apk")
                 )
                 .listener(object : DownloadListener(this) {
                     override fun onSuccess() {
@@ -144,6 +146,7 @@ class MzituActivity : BaseActivity() {
                         toast("下载失败")
                     }
                 })
+                .disableBreakPointDownload()
                 .submit()
     }
 
