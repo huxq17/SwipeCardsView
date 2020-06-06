@@ -12,7 +12,6 @@ import com.andbase.tractor.task.TaskPool
 import com.huxq17.download.Pump
 import com.huxq17.download.core.DownloadInfo
 import com.huxq17.download.core.DownloadListener
-import com.huxq17.download.utils.LogUtil
 import com.huxq17.example.R
 import com.huxq17.example.base.BaseFragment
 import com.huxq17.example.bean.TabBean
@@ -203,11 +202,9 @@ class MzituFragment : BaseFragment() {
         override fun onViewDetachedFromWindow(holder: MeiziViewHolder) {
             super.onViewDetachedFromWindow(holder)
             fragment.map.remove(holder.image)
-            LogUtil.e("unbind item="+holder.image)
         }
         override fun onBindViewHolder(holder: MeiziViewHolder, position: Int) {
             val item = list[position]
-            LogUtil.e("bind item="+item.image)
             holder.loadImage(item.image, fragment.getUrl())
             fragment.map[item.image] = holder
             holder.itemView.tvTitle.text = item.title
@@ -244,6 +241,7 @@ class MzituFragment : BaseFragment() {
                     .setRequestBuilder(Request.Builder()
                             .addHeader("referer", URLEncoder.encode(referer, "utf-8"))
                     )
+                    .disableBreakPointDownload()
                     .submit()
         }
 

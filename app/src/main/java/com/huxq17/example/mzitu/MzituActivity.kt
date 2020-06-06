@@ -154,13 +154,13 @@ class MzituActivity : BaseActivity() {
         val intent = Intent(Intent.ACTION_VIEW)
         val file = File(apkPath)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             val contentUri = FileProvider.getUriForFile(this, "$packageName.fileProvider-installApk", file)
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
         } else {
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive")
         }
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
     }
 
