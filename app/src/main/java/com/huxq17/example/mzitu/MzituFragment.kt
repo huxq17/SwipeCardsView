@@ -241,7 +241,7 @@ class MzituFragment : BaseFragment() {
                     .setRequestBuilder(Request.Builder()
                             .addHeader("referer", URLEncoder.encode(referer, "utf-8"))
                     )
-                    .disableBreakPointDownload()
+                    .threadNum(1)
                     .submit()
         }
 
