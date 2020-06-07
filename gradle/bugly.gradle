@@ -3,5 +3,5 @@ apply plugin: 'bugly'
 bugly {
     appId = '5d27c16bd9'
     appKey = '26f3f373-54ad-4d7e-bf3c-bf22cff0c93f'
-    debug = true
+    debug = false
 }

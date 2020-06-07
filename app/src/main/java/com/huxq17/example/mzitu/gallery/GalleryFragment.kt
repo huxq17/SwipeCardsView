@@ -1,5 +1,6 @@
 package com.huxq17.example.mzitu.gallery
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -43,7 +44,7 @@ class GalleryFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_gallery, container, false)
     }
 
-    private var imageUrl :String?=null
+    private var imageUrl: String? = null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,13 +61,13 @@ class GalleryFragment : BaseFragment() {
         ivGallery.setOnLongClickListener {
             imageUrl?.let {
                 RxPump.getFileIfSucceed(it).subscribe { file: File? ->
-                    file?.let {file ->
-                        share(file)
+                    file?.let { it ->
+                        share(it)
                     }
                 }
-            }?:run{
-            false
-        }
+            } ?: run {
+                false
+            }
             true
         }
     }
@@ -127,28 +128,37 @@ class GalleryFragment : BaseFragment() {
         context!!.startActivity(Intent.createChooser(intent, "分享到"))
     }
 
+    @SuppressLint("CheckResult")
     private fun downloadImage(imageUrl: String) {
         this.imageUrl = imageUrl
-        Pump.newRequest(imageUrl)
-                .setRequestBuilder(Request.Builder()
-                        .addHeader("referer", URLEncoder.encode(galleryBean.url, "utf-8"))
-                )
-                .setDownloadTaskExecutor(App.getInstance().imageDispatcher)
-                .threadNum(1)
-                .setRetry(3, 300)
-                .listener(object : DownloadListener(this) {
-                    override fun onSuccess() {
-                        super.onSuccess()
-                        Picasso.get().load(File(downloadInfo.filePath))
-                                .config(Bitmap.Config.ARGB_8888)
-                                .into(ivGallery)
-                    }
+       RxPump.getFileIfSucceed(imageUrl).subscribe({ file ->
+            loadImage(file)
+        }, {
+            Pump.newRequest(imageUrl)
+                    .setRequestBuilder(Request.Builder()
+                            .addHeader("referer", URLEncoder.encode(galleryBean.url, "utf-8"))
+                    ).setDownloadTaskExecutor(App.getInstance().imageDispatcher)
+                    .threadNum(1)
+                    .setRetry(3, 300)
+                    .listener(object : DownloadListener(this) {
+                        override fun onSuccess() {
+                            super.onSuccess()
+                            loadImage(File(downloadInfo.filePath))
+                        }
 
-                    override fun onFailed() {
-                        super.onFailed()
-                        toast("downloadFailed ")
-                    }
-                }).submit()
+                        override fun onFailed() {
+                            super.onFailed()
+                            toast("服务器异常")
+                        }
+                    }).submit()
+        })
+
+    }
+
+    private fun loadImage(file: File) {
+        Picasso.get().load(file)
+                .config(Bitmap.Config.ARGB_8888)
+                .into(ivGallery)
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
