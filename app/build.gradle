@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply from: "${project.rootProject.file('gradle/kotlin.gradle')}"
+apply from: "${project.rootProject.file('gradle/bugly.gradle')}"
 
 android {
     compileSdkVersion appCompileSdkVersion

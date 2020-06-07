@@ -20,6 +20,7 @@ import com.huxq17.example.R
 import com.huxq17.example.base.BaseActivity
 import com.huxq17.example.bean.TabBean
 import com.huxq17.example.mzitu.utils.AppUtils
+import com.tencent.bugly.crashreport.CrashReport
 import kotlinx.android.synthetic.main.activity_mzitu.*
 import okhttp3.Request
 import org.jsoup.Jsoup
@@ -79,30 +80,33 @@ class MzituActivity : BaseActivity() {
         listener.setDismissTime(0)
         TaskPool.getInstance().execute(object : Task("downloadAPk", listener) {
             override fun onRun() {
-                Jsoup.connect("https://github.com/huxq17/SwipeCardsView/tree/dev/apk")
-                        .header("Accept-Encoding", "gzip, deflate")
-                        .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
-                        .maxBodySize(0)
-                        .validateTLSCertificates(false)
-                        .timeout(30000)
-                        .get()?.select("span.css-truncate")?.let { elements ->
-                            if (elements.size > 0) {
-                                elements[0].text()?.let {
-                                    val preIndex = it.lastIndexOf("_") + 1
-                                    val lastDotIndex = it.lastIndexOf(".")
-                                    val apkVersionCode = it.substring(preIndex, lastDotIndex).toIntOrNull()
-                                            ?: 0
-                                    if (apkVersionCode > AppUtils.getVersionCode(this@MzituActivity)) {
-                                        notifySuccess("https://raw.githubusercontent.com/huxq17/SwipeCardsView/dev/apk/$it")
+                try {
+                    Jsoup.connect("https://github.com/huxq17/SwipeCardsView/tree/dev/apk")
+                            .header("Accept-Encoding", "gzip, deflate")
+                            .userAgent(App.getUserAgent())
+                            .maxBodySize(0)
+                            .timeout(30000)
+                            .get()?.select("span.css-truncate")?.let { elements ->
+                                if (elements.size > 0) {
+                                    elements[0].text()?.let {
+                                        val preIndex = it.lastIndexOf("_") + 1
+                                        val lastDotIndex = it.lastIndexOf(".")
+                                        val apkVersionCode = it.substring(preIndex, lastDotIndex).toIntOrNull()
+                                                ?: 0
+                                        if (apkVersionCode > AppUtils.getVersionCode(this@MzituActivity)) {
+                                            notifySuccess("https://raw.githubusercontent.com/huxq17/SwipeCardsView/dev/apk/$it")
+                                        }
                                     }
-                                }
 
-                            }
-                            notifyFail("")
-                        } ?: run {
+                                }
+                                notifyFail("")
+                            } ?: run {
+                        notifyFail("网络异常")
+                    }
+                } catch (e: Exception) {
+                    CrashReport.postCatchedException(e)
                     notifyFail("网络异常")
                 }
-
             }
 
             override fun cancelTask() {

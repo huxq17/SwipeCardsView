@@ -21,7 +21,6 @@ import com.huxq17.example.http.HttpSender
 import com.huxq17.example.mzitu.App
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_gallery.*
-import kotlinx.android.synthetic.main.fragment_gallery.view.*
 import okhttp3.Request
 import org.jsoup.Jsoup
 import java.io.File
@@ -44,6 +43,8 @@ class GalleryFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_gallery, container, false)
     }
 
+    private var imageUrl :String?=null
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,6 +56,18 @@ class GalleryFragment : BaseFragment() {
         }
         ivGallery.setOnClickListener {
             (activity as? GalleryActivity)?.next()
+        }
+        ivGallery.setOnLongClickListener {
+            imageUrl?.let {
+                RxPump.getFileIfSucceed(it).subscribe { file: File? ->
+                    file?.let {file ->
+                        share(file)
+                    }
+                }
+            }?:run{
+            false
+        }
+            true
         }
     }
 
@@ -115,14 +128,7 @@ class GalleryFragment : BaseFragment() {
     }
 
     private fun downloadImage(imageUrl: String) {
-        ivGallery.setOnLongClickListener {
-            RxPump.getFileIfSucceed(imageUrl).subscribe { file: File? ->
-                file?.let {
-                    share(it)
-                }
-            }
-            true
-        }
+        this.imageUrl = imageUrl
         Pump.newRequest(imageUrl)
                 .setRequestBuilder(Request.Builder()
                         .addHeader("referer", URLEncoder.encode(galleryBean.url, "utf-8"))
@@ -135,7 +141,7 @@ class GalleryFragment : BaseFragment() {
                         super.onSuccess()
                         Picasso.get().load(File(downloadInfo.filePath))
                                 .config(Bitmap.Config.ARGB_8888)
-                                .into(view.ivGallery)
+                                .into(ivGallery)
                     }
 
                     override fun onFailed() {

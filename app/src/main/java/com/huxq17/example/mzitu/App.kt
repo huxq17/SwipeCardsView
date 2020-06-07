@@ -26,6 +26,7 @@ class App : Application() {
         fun getInstance():App {
             return instance
         }
+        fun getUserAgent()="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36"
     }
 
     var imageDispatcher: DownloadTaskExecutor = object : SimpleDownloadTaskExecutor() {
@@ -49,6 +50,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        com.huxq17.example.utils.Utils.trustEveryone()
         Picasso.setSingletonInstance(picasso)
         CrashReport.initCrashReport(applicationContext, "5d27c16bd9", BuildConfig.DEBUG);
         DownloadConfig.newBuilder() //Optional,set the maximum number of tasks to run at the same time, default 3.
