@@ -14,12 +14,12 @@ import com.andbase.tractor.listener.impl.LoadListenerImpl
 import com.andbase.tractor.task.Task
 import com.andbase.tractor.task.TaskPool
 import com.huxq17.download.Pump
-import com.huxq17.download.RxPump
 import com.huxq17.download.core.DownloadListener
 import com.huxq17.example.R
 import com.huxq17.example.base.BaseFragment
 import com.huxq17.example.http.HttpSender
 import com.huxq17.example.mzitu.App
+import com.huxq17.example.mzitu.RxPump
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import okhttp3.Request
@@ -49,11 +49,14 @@ class GalleryFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         galleryBean.image?.let {
             downloadImage(it)
         } ?: run {
-            loadData()
+            (activity as? GalleryActivity)?.templateImageUrl?.format(galleryBean.page)?.let {
+                downloadImage(it)
+            }?:run{
+                loadData()
+            }
         }
         ivGallery.setOnClickListener {
             (activity as? GalleryActivity)?.next()
@@ -131,7 +134,7 @@ class GalleryFragment : BaseFragment() {
     @SuppressLint("CheckResult")
     private fun downloadImage(imageUrl: String) {
         this.imageUrl = imageUrl
-       RxPump.getFileIfSucceed(imageUrl).subscribe({ file ->
+        RxPump.getFileIfSucceed(imageUrl).subscribe({ file ->
             loadImage(file)
         }, {
             Pump.newRequest(imageUrl)
@@ -156,9 +159,11 @@ class GalleryFragment : BaseFragment() {
     }
 
     private fun loadImage(file: File) {
-        Picasso.get().load(file)
-                .config(Bitmap.Config.ARGB_8888)
-                .into(ivGallery)
+        ivGallery?.let {
+            Picasso.get().load(file)
+                    .config(Bitmap.Config.ARGB_8888)
+                    .into(it)
+        }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {

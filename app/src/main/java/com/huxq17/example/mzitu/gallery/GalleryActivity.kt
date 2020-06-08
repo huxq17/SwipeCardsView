@@ -29,6 +29,7 @@ class GalleryActivity : BaseActivity() {
     }
 
     private var item: PostItem? = null
+    var templateImageUrl: String? = null
     private var adapter: GalleryAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,7 @@ class GalleryActivity : BaseActivity() {
 
             override fun onPageSelected(position: Int) {
                 tvPageIndex.text = "${position + 1} / ${adapter?.count}"
-                PageStore.storePage(item?.url,position)
+                PageStore.storePage(item?.url, position)
             }
 
         })
@@ -83,17 +84,19 @@ class GalleryActivity : BaseActivity() {
                     val doc = Jsoup.parse(html)
                     val imageElement = doc.select("div.main-image").select("img")
                     val image = imageElement.attr("src")
+
+                    templateImageUrl = image.replaceRange(image.lastIndexOf("0"),image.lastIndexOf("."),"%s")
                     var totalPage = doc.select("div.pagenavi").select("a").let { element ->
                         element[element.size - 2].attr("href").let {
                             it.substring(it.lastIndexOf("/") + 1).toInt()
                         }
                     }
                     val galleryList = arrayListOf<GalleryBean>()
-                    galleryList.add(GalleryBean(item?.url ?: "", image,
+                    galleryList.add(GalleryBean(item?.url ?: "", image,"01",
                             imageElement.attr("width").toInt(),
                             imageElement.attr("height").toInt()))
                     for (index in 2..totalPage) {
-                        galleryList += GalleryBean("${item?.url}/$index", null, 0, 0)
+                        galleryList += GalleryBean("${item?.url}/$index", null,if(index<10) "0$index" else "$index", 0, 0)
                     }
 
                     notifySuccess(galleryList)

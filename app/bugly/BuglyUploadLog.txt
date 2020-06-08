@@ -70,3 +70,7 @@ file=/Users/user/work/SwipeCardsView/app/build/outputs/mapping/release/mapping.t
 sha1=47d7d71ced68b5b9af74823011c6564dbdf40d72
 appId=5d27c16bd9
 
+file=/Users/user/work/SwipeCardsView/app/build/outputs/mapping/release/mapping.txt
+sha1=d9abd87d7a3ea32d745c977df7b129d7a61e12ae
+appId=5d27c16bd9
+
